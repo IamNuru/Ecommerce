@@ -1,0 +1,5 @@
+.rsc-ts-bubble,
+.rsc-ts-bubble > div {
+  max-width: 100%;
+  padding: 6px 8px;
+}

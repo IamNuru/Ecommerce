@@ -1,0 +1,8 @@
+.close-box{
+    max-height: 0;
+    transition: max-height 0.7s;
+}
+.open-box{
+    max-height: 300px;
+    transition: max-height 0.7s ;
+}
