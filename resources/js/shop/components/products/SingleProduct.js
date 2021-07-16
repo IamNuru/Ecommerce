@@ -60,7 +60,8 @@ const SingleProduct = props => {
                                         src={`${process.env.MIX_APP_URL}/storage/images/products/${product.image}`}
                                         alt={product.title}
                                         className="w-full h-full p-2 object-contain"
-                                    /><img
+                                    />
+                                    <img
                                     src={`${process.env.MIX_APP_URL}/storage/images/products/${product.image}`}
                                     alt={product.title}
                                     className="w-full h-full p-2 object-contain"
