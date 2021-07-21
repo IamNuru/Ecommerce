@@ -72,47 +72,18 @@ class TransactionController extends Controller
             dd('Something went wrong');
         }
 
-        /* DB::transaction(function () use ($request) { */
-        /* $transaction = auth()->user()->transactions()->create([
-                'transaction_id' => $request->transaction_id,
-                'products' => $request->cart,
-                'payment_method' => $request->payment_method,
-                'amount' => $request->amount,
-                'status' => 'placed',
-            ]); */
-        /* foreach ($request->cart as $item) {
-
-                $order = auth()->user()->orders()->create(array(
-                    'transaction_id' => $transaction->id,
-                    'product_id' => $item['id'],
-                    'qty' => $item['qty'],
-                ));
-                $product = Product::findOrFail($item['id']);
-                if ($product->price != ($item['price'] / $item['qty'])) {
-                    return response()->json([
-                        'status' => 'error',
-                        'message' => 'error',
-                        'errors' => ["Something went wrong, Your Order couldn't go through"],
-                    ], 401);
-                } else {
-                    if ($product->qty > $item['qty']) {
-                        $product->qty = $product->qty - $item['qty'];
-                        $product->update();
-                    } else {
-                        return response()->json([
-                            'status' => 'error',
-                            'message' => 'error',
-                            'errors' => ['Quantity requested is not available'],
-                        ], 401);
-                    }
-                }
-            }; */
-        /* }); */
-
 
 
         return response()->json(['message' => 'Order successfuly placed']);
     }
+
+
+    //fetch items purchased today
+    public function purchasedToday(){
+        $data = Transaction::with("orders.products")->where()->get();
+    }
+
+
 
     public function checkOrderStatus($orderNumber)
     {
@@ -142,6 +113,8 @@ class TransactionController extends Controller
     {
         //
     }
+
+    
 
 
 
