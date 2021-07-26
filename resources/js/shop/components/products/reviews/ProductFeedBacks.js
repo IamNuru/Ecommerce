@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useContext } from "react";
-import ProductContext from "../../context/products/ProductsContext";
+import ProductContext from "../../context/products/Context";
 import ProductStars from "./ProductStars";
 
 const ProductFeedBacks = () => {

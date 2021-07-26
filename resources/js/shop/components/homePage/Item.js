@@ -1,6 +1,6 @@
 import React, { useContext } from "react";
 import { Link } from "react-router-dom";
-import CartContext from "../context/cart/CartContext";
+import CartContext from "../context/cart/Context";
 const Item = (props) => {
   const cartContext = useContext(CartContext);
   const { cart, addToCart, removeFromCart } = cartContext;
@@ -33,13 +33,13 @@ const Item = (props) => {
         </div>
         <div className="p-4">
           <Link to={`/product/${product.id}`}>
-            <h2 className="mt-2 mb-2  font-bold hover:text-red-600 transition duration-600">
+            <h2 className="mt-2 mb-2  font-semibold hover:text-red-600 transition duration-600">
               {product.title}
             </h2>
           </Link>
 
           <div className="mt-3 flex items-center">
-            <span className="font-bold text-xl">
+            <span className="font-semibold text-xl">
               {formatter.format(product.price)}
             </span>
             &nbsp;

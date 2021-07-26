@@ -1,54 +1,40 @@
-import React, { useContext, useEffect } from "react";
-import ApplyCoupon from "./ApplyCoupon";
-import CartCheckOutButton from "./CartCheckOutButton";
+import React, { useContext, useEffect, useState } from "react";
+import ApplyCoupon from "./inc/ApplyCoupon";
+import CartCheckOutButton from "./inc/CartCheckOutButton";
 import CartRow from "./CartRow";
-import CartContext from "../context/cart/CartContext";
+import CartContext from "../context/cart/Context";
 import Formatter from "../inc/Formatter";
 import EmptyCart from "./EmptyCart";
-import ShippingCharge from "./ShippingCharge";
-import AuthContext from "../context/auth/Context";
+import Shipping from "./inc/Shipping";
+import UserContext from "../context/user/Context";
+import DestinationContext from "../context/destination/Context";
 
 const Cart = () => {
-    const { user } = useContext(AuthContext);
+    const { user } = useContext(UserContext);
+    const { shippingCharge, destination } = useContext(DestinationContext);
     const {
         cart,
+        cartTotal,
+        couponWorth,
         errors,
         clearErrors,
-        shippingCharge,
         couponValue,
-        refreshCart
+        refreshCart,
+        getCartTotalAmount,
+        getCartCouponWorth,
     } = useContext(CartContext);
-
+    
     useEffect(() => {
         refreshCart(cart);
-
+        getCartTotalAmount()
+        getCartCouponWorth()
+            
         return () => {
             clearErrors();
         };
         // eslint-disable-next-line
-    }, [cart]);
-
-    //Get the total cost in carty
-    const totalCost =
-        cart?.length > 0 &&
-        cart
-            .map(item => (item.price - item.deduction) * item.qty)
-            .reduce((prev, next) => parseInt(prev) + parseInt(next), 0);
-
-    //Get percentage amount to be deducted
-    const couponWorth =
-        cart?.length > 0 &&
-        cart
-            .map(item => (item.price - item.deduction) * item.qty)
-            .reduce((prev, next) => parseInt(prev) + parseInt(next), 0) *
-            (couponValue / 100);
-
-    //Cost after deducting coupon value if any
-    const totalCostAfterCoupon = totalCost && totalCost - couponWorth;
-
-    //Total amount to pay
-    const totalAmountToPay =
-        totalCostAfterCoupon && totalCostAfterCoupon + shippingCharge;
+    }, [cart, couponValue]);
+    
 
     return (
         <div className="flex justify-center my-6">
@@ -98,7 +84,7 @@ const Cart = () => {
                         <hr className="pb-6 mt-6" />
                         <div className="mb-4 mt-6 max-w-xl place-content-center m-auto">
                             <div className="">
-                                <ShippingCharge />
+                                <Shipping />
                             </div>
                             <div className="mt-6">
                                 <ApplyCoupon />
@@ -115,8 +101,7 @@ const Cart = () => {
                                             Subtotal
                                         </div>
                                         <div className="lg:px-4 lg:py-2 m-2 lg:text-lg font-bold text-center text-gray-900">
-                                            {totalCost &&
-                                                Formatter.format(totalCost)}
+                                            { Formatter.format(parseInt(cartTotal)) }
                                         </div>
                                     </div>
                                     <div className="flex justify-between pt-4 border-b">
@@ -126,7 +111,7 @@ const Cart = () => {
                                         <div className="lg:px-4 lg:py-2 m-2 lg:text-lg font-bold text-center text-green-700">
                                             {couponValue
                                                 ? `${couponValue}%`
-                                                : "-"}
+                                                : "-"} 
                                         </div>
                                     </div>
                                     <div className="flex justify-between pt-4 border-b">
@@ -134,11 +119,8 @@ const Cart = () => {
                                             New Subtotal
                                         </div>
                                         <div className="lg:px-4 lg:py-2 m-2 lg:text-lg font-bold text-center text-gray-900">
-                                            {/* substract coupon value here */}
-                                            {totalCost &&
-                                                Formatter.format(
-                                                    totalCost - couponWorth
-                                                )}
+                                        {/* substract coupon from */}
+                                            { Formatter.format(parseInt(cartTotal) - parseInt(couponWorth))}
                                         </div>
                                     </div>
                                     <div className="flex justify-between pt-4 border-b">
@@ -148,7 +130,7 @@ const Cart = () => {
                                         <div className="lg:px-4 lg:py-2 m-2 lg:text-lg font-bold text-center text-gray-900">
                                             {shippingCharge
                                                 ? Formatter.format(
-                                                      shippingCharge
+                                                      parseInt(shippingCharge)
                                                   )
                                                 : "-"}
                                         </div>
@@ -158,10 +140,8 @@ const Cart = () => {
                                             Total
                                         </div>
                                         <div className="lg:px-4 lg:py-2 m-2 lg:text-lg font-bold text-center text-gray-900">
-                                            {totalAmountToPay &&
-                                                Formatter.format(
-                                                    totalAmountToPay
-                                                )}
+                                            {cartTotal && couponWorth || shippingCharge &&
+                                            Formatter.format((parseInt(cartTotal) - parseInt(couponWorth)) + parseInt(shippingCharge))}
                                         </div>
                                     </div>
                                     <div>

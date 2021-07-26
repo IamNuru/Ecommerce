@@ -34,9 +34,6 @@ class ChatController extends Controller
         $request->validate([
             'message' => 'required',
         ]);
-        $user = Auth::user();
-
-
         $message = new Message;
         $message->from_id = $from_id;
         $message->to_id = $to_id;
@@ -53,7 +50,7 @@ class ChatController extends Controller
             'message' => 'required',
         ]);
         //$user = Auth::user();
-        $user = Chat::find($from_id);
+        //$user = Chat::find($from_id);
 
         //check if user is activated
 
@@ -171,12 +168,9 @@ class ChatController extends Controller
 
     //fetch messages
     public function fetchMessages()
-
     {
         return Message::with('user')->get();
     }
-
-
 
 
 
@@ -184,7 +178,6 @@ class ChatController extends Controller
     public function sendMessage(Request $request)
     {
         $user = Auth::user();
-
         $message = $user->messages()->create([
             'message' => $request->message
         ]);

@@ -1,5 +1,5 @@
 import React, { useContext } from "react";
-import CartContext from "./context/cart/CartContext";
+import CartContext from "./context/cart/Context";
 const Item = (props) => {
   const formatter = new Intl.NumberFormat("en-US", {
     style: "currency",
@@ -24,12 +24,12 @@ const Item = (props) => {
         <div className="relative pb-48 overflow-hidden">
           <img
             className="absolute inset-0 h-full w-full object-cover"
-            src={`${process.env.MIX_REACT_APP_URL}/storage/images/products/${product.image}`}
+            src={`${process.env.MIX_APP_URL}/storage/images/products/${product.image}`}
             alt={product.title}
           />
         </div>
         <div className="p-4">
-          <h2 className="mt-2 mb-2  font-bold">{product.title}</h2>
+          <h2 className="mt-2 mb-2  font-semibold">{product.title}</h2>
           <div className="mt-3 flex items-center">
             {product.deduction && (
               <span className="text-sm font-semibold line-through text-pink-600">
@@ -37,7 +37,7 @@ const Item = (props) => {
               </span>
             )}
             &nbsp;
-            <span className="font-bold text-md text-purple-600">
+            <span className="font-semibold text-md text-purple-600">
               {product.deduction
                 ? formatter.format(product.price - product.deduction)
                 : formatter.format(product.price)}
@@ -49,14 +49,14 @@ const Item = (props) => {
           {cart.filter((item) => item.id === product.id).length > 0 ? (
             <div
               onClick={removeProductFromCart}
-              className="cursor-pointer bg-pink-200 text-pink-700 font-bold text-md rounded w-full mx-2 px-4 text-center py-1"
+              className="cursor-pointer bg-pink-200 text-pink-700 font-semibold text-md rounded w-full mx-2 px-4 text-center py-1"
             >
               Remove from Cart
             </div>
           ) : (
             <div
               onClick={addProductToCart}
-              className="cursor-pointer bg-purple-200 text-purple-700 font-bold text-md rounded w-full mx-2 px-4 text-center py-1"
+              className="cursor-pointer bg-purple-200 text-purple-700 font-semibold text-md rounded w-full mx-2 px-4 text-center py-1"
             >
               Add to Cart
             </div>

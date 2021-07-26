@@ -4,6 +4,7 @@ use App\Http\Controllers\ChatController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\ReactController;
 use App\Http\Controllers\PaymentController;
+use App\Http\Controllers\ProductController;
 use App\Http\Controllers\TransactionController;
 
 /* Route::get('/', function () {
@@ -15,6 +16,10 @@ Route::post('/pay', [PaymentController::class, 'redirectToGateway'])->name('pay'
 Route::get('/payment/callback', [PaymentController::class, 'handleGatewayCallback']);
 // get payment by its ref
 Route::get('/p/r', [PaymentController::class, 'getPay']);
+
+//import and exports
+Route::get('products/export',[ProductController::class, 'export']);
+
 
 
 //after succesful payment, redirect to this url

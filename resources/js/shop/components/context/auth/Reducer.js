@@ -2,18 +2,14 @@ import {
     REGISTER,
     LOGIN,
     LOGOUT,
-    ADD_TO_ORDERS,
     ERRORS,
     CLEAR_ERRORS,
-    GET_ORDERS,
     GET_USER,
     CLEAR_MESSAGES,
     SUCCESS_MESSAGES,
     SET_lOADING,
     SET_LOGED_IN,
-    UPDATE_USER,
     SET_FORM_lOADING,
-    GET_DESTINATION
 } from "../types";
 
 const AuthReducer = (state, action) => {
@@ -36,19 +32,6 @@ const AuthReducer = (state, action) => {
                 logedin: true,
                 loading: false
             };
-        case GET_DESTINATION:
-            return {
-                ...state,
-                userDestination: action.payload,
-            };
-
-        case UPDATE_USER:
-            return {
-                ...state,
-                success: action.payload,
-                formloading: false,
-                errors: null
-            };
 
         case LOGOUT:
             localStorage.removeItem("token");
@@ -57,13 +40,6 @@ const AuthReducer = (state, action) => {
                 logedin: false,
                 user: null,
                 errors: null,
-                loading: false
-            };
-
-        case GET_ORDERS:
-            return {
-                ...state,
-                orders: action.payload,
                 loading: false
             };
 
@@ -81,11 +57,6 @@ const AuthReducer = (state, action) => {
                 formloading: false,
             };
 
-        case ADD_TO_ORDERS:
-            return {
-                ...state,
-                orders: [...state.orders, action.payload]
-            };
 
         case SUCCESS_MESSAGES:
             return {

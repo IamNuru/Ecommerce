@@ -1,6 +1,5 @@
 import React, { useContext, useState, useEffect } from "react";
-import ProductsContext from "../../context/products/ProductsContext";
-import AuthContext from "../../context/auth/Context";
+import ReviewContext from "../../context/review/Context";
 import Star from "./Star";
 import FormLoadingCover from "../../inc/FormLoadingCover";
 
@@ -22,8 +21,7 @@ const ReviewProduct = (props) => {
         formloading,
         setFormLoading,
         clearMessages,
-        setProductToNull,
-    } = useContext(ProductsContext);
+    } = useContext(ReviewContext);
 
 
 

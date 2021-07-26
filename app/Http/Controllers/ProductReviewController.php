@@ -44,6 +44,8 @@ class ProductReviewController extends Controller
         return response()->json('Review Updated');
     }
 
+
+
     //show a review
     public function show($reviewId)
     {
@@ -62,5 +64,5 @@ class ProductReviewController extends Controller
         return response()->json('Review Deleted');
     }
 
-    //get user reviews
+    
 }

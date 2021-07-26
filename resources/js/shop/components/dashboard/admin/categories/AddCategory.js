@@ -1,5 +1,5 @@
 import React, { useContext, useState, useEffect } from "react";
-import ProductsContext from "../../../context/products/ProductsContext";
+import CategoryContext from "../../../context/category/Context";
 import { Link } from "react-router-dom";
 
 
@@ -14,7 +14,7 @@ const AddCategory = () => {
     clearMessages,
     formloading,
     setFormLoading
-  } = useContext(ProductsContext);
+  } = useContext(CategoryContext);
 
   // declare state
   const [data, setData] = useState({

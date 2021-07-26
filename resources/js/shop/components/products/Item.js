@@ -1,6 +1,6 @@
 import React, { useContext } from "react";
 import { Link } from "react-router-dom";
-import CartContext from "../context/cart/CartContext";
+import CartContext from "../context/cart/Context";
 
 const Item = (props) => {
   const cartContext = useContext(CartContext);
@@ -47,7 +47,7 @@ const Item = (props) => {
       </Link>
       <div className="px-6 py-2">
         <Link to={`/product/${product.id}`}>
-          <div className="font-bold text-md mb-2 hover:text-red-600 transition duration-500">
+          <div className="font-semibold text-md mb-2 hover:text-red-600 transition duration-500">
             {product.title}
           </div>
         </Link>
@@ -56,18 +56,18 @@ const Item = (props) => {
         {wishList?.length > 0 &&
         wishList.some((wli) => wli.id === product.id) ? (
           <span
-            className="cursor-pointer p-2 bg-purple-700 rounded-full px-1 py-1 text-sm font-semibold mr-2 mb-2"
+            className="cursor-pointer p-2 px-1 py-1 text-sm font-semibold mr-2 mb-2"
             onClick={removeProductFromWishList}
           >
-            &#128155;
+            <i className="fa fa-heart text-gray-400" title="Remove from wishlist"></i>
+           {/*  &#128155; */}
           </span>
         ) : (
           <span
-            className="cursor-pointer p-2 rounded-full px-1 py-1 text-sm font-semibold mr-2 mb-2"
+            className="cursor-pointer p-2 px-1 py-1 text-sm font-semibold mr-2 mb-2"
             onClick={addProductToWishList}
           >
-            <i className="fa fa-heart bg-white"></i>
-            &#128155;
+            <i className="fa fa-heart text-yellow-600" title="Add to wishlist"></i>
           </span>
         )}
 

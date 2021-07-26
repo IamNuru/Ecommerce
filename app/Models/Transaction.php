@@ -25,23 +25,16 @@ class Transaction extends Model
     ];
 
     // get all users in transaction table
-    public function users(){
-        return $this->belongsToMany(User::class);
+    public function user(){
+        return $this->belongsTo(User::class, 'user_id', 'id');
     }
 
-    // products with transactiond
-    public function products(){
-        return $this->hasMany(Product::class);
-    }
-    // products with transactiond
+
+    // products with transaction
     public function orders(){
         return $this->hasMany(Order::class);
     }
 
-    // products with transactiond
-    public function productss(){
-        return $this->hasManyThrough(Product::class, Order::class);
-    }
 
     
 

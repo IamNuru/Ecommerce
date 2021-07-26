@@ -12,13 +12,18 @@ import {
     DELETE_DESTINATION,
     UPDATE_DESTINATION,
     CLEAR_MESSAGES,
-    ADD_DESTINATION
+    ADD_DESTINATION,
+    SET_lOADING,
+    SET_CURRENT_DESTINATION,
+    SET_SHIPPING_CHARGE,
 } from "../types";
 
 const DestinationState = props => {
     const initialState = {
         destinations: null,
         destination: null,
+        shippingCharge: 0,
+        currentDestination: null,
         errors: null,
         formloading: false
     };
@@ -53,6 +58,7 @@ const DestinationState = props => {
                 });
             });
     };
+    
 
     //**delete destination from db */
     const deleteDestination = async (id) => {
@@ -143,6 +149,24 @@ const DestinationState = props => {
     } catch (error) {}
   };
 
+
+  // set the value of the shipping charge
+  const setShippingCharge = charge => {
+    dispatch({
+        type: SET_SHIPPING_CHARGE,
+        payload: charge
+    });
+};
+
+
+    //Set state loading
+    const setLoading = loadingValue => {
+      dispatch({
+          type: SET_lOADING,
+          payload: loadingValue
+      });
+  };
+
     //Set state of form when clicked
     const setFormLoading = loadingValue => {
         dispatch({
@@ -165,6 +189,7 @@ const DestinationState = props => {
                 destinations: state.destinations,
                 errors: state.errors,
                 formloading: state.formloading,
+                shippingCharge: state.shippingCharge,
                 success: state.success,
                 clearErrors,
                 addDestination,
@@ -173,6 +198,7 @@ const DestinationState = props => {
                 getDestination,
                 deleteDestination,
                 updateDestination,
+                setShippingCharge,
                 clearMessages,
             }}
         >

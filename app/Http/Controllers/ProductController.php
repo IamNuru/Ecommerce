@@ -7,6 +7,8 @@ use App\Models\Product;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Str;
+use App\Exports\ProductsExport;
+use Maatwebsite\Excel\Facades\Excel;
 
 class ProductController extends Controller
 {
@@ -22,6 +24,8 @@ class ProductController extends Controller
         return response()->json($data);
     }
 
+
+
     //fetch all products
     public function index()
     {
@@ -34,19 +38,17 @@ class ProductController extends Controller
     }
 
 
+
     public function homepageProducts(Request $request, $catName)
     {
         $limit = $request->input('limit', 6);
 
-        $catId = Category::where('name', $catName)
+        $data = Category::with(['products' => function($query) use ($limit){
+            $query->where('qty', '>', 0)->limit($limit);
+            }, 'products.reviews'])
+            ->where('name', $catName)
             ->orWhere('slug', $catName)
             ->first();
-        $data = Product::with('category','reviews')
-            ->where('category_id', $catId->id)
-            ->where('qty', '>', 0)
-            ->limit($limit)
-            ->latest()
-            ->get();
 
         return response()->json($data);
     }
@@ -64,6 +66,8 @@ class ProductController extends Controller
 
         return response()->json($data);
     }
+
+
 
     //fetch all products
     public function relatedProducts(Request $request, $id)
@@ -127,11 +131,11 @@ class ProductController extends Controller
         return response()->json(['message' => 'Product Saved Successfully']);
     }
 
+
+
     /**
      * Display the specified resource.
      *
-     * @param  \App\Models\Product  $product
-     * @return \Illuminate\Http\Response
      */
     public function show(Product $product, $id)
     {
@@ -139,12 +143,10 @@ class ProductController extends Controller
         return response()->json($pro);
     }
 
+
+
     /**
      * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  \App\Models\Product  $product
-     * @return \Illuminate\Http\Response
      */
     public function update(Request $request, Product $product, $id)
     {
@@ -191,6 +193,8 @@ class ProductController extends Controller
         return response()->json(['message' => 'Product Updated Successfully']);
     }
 
+
+
     /**
      * Remove the specified resource from storage.
      */
@@ -199,6 +203,8 @@ class ProductController extends Controller
         $product = Product::destroy($id);
         return response()->json(['message' => 'Product Deleted Successfully']);
     }
+
+
 
     /**
      * 
@@ -213,11 +219,6 @@ class ProductController extends Controller
     }
 
 
-    //get a particular product reviews
-    public function reviews($productId)
-    {
-    }
-
 
     //get product brands
     public function brands()
@@ -225,5 +226,12 @@ class ProductController extends Controller
         //$brands = DB::table('products')->select('id', 'brand')->groupBy('brand')->get();
         $brands = Product::select('brand')->distinct('brand')->get();
         return response()->json($brands);
+    }
+
+
+    public function export() 
+    {
+        return Excel::download(new ProductsExport, 'products.xlsx');
+        return back();
     }
 }

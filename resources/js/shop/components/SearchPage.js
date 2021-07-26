@@ -1,6 +1,6 @@
 import React, { useContext, useEffect, useState } from "react";
 import { withRouter } from "react-router";
-import ProductsContext from "./context/products/ProductsContext";
+import ProductsContext from "./context/products/Context";
 import ReactPaginate from "react-paginate";
 import Item from "./Item";
 import emptyImage from "../images/emptyImage.svg";

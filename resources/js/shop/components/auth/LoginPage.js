@@ -4,7 +4,7 @@ import AuthContext from "../context/auth/Context";
 
 const LoginPage = (props) => {
   const authContext = useContext(AuthContext);
-  const { login, errors, logedin, setError } = authContext;
+  const { login, errors, logedin, setError, clearMessages } = authContext;
 
   
   // set state
@@ -19,7 +19,9 @@ const LoginPage = (props) => {
     if(logedin){
       props.history.push('/')
     }
-
+    return () => {
+      clearMessages();
+    };
     // eslint-disable-next-line
   }, [logedin])
 
@@ -33,42 +35,18 @@ const LoginPage = (props) => {
     setCredentials({ ...credentials, [e.target.name]: e.target.value });
   }
 
-  // toggle stay logged in 
-  const changeStayLogedInStatus = () =>{
-    setStayLogedIn(!stayLogedIn)
-  }
-
 
   // log in the user
   const loginUser = (e) => {
     e.preventDefault();
     setError('');
-    //const auth = users.some(u => (u.email === email && u.password === password));
-    if (email === "" || password === "") {
+     if (email === "" || password === "") {
       setError('Fill in your credentials');
       return false;
     }
-    /* else if (!auth) {
-      setErrorMsg("Invalid credentials");
-      return false;
-    }
-    else if (auth) {
-      const u = users.find(u => (u.email === email && u.password === password));
-      login(u);
-      var intendedLocation = props.location.state;
-      if(intendedLocation === undefined){
-        props.history.push('/')
-      }else{
-        props.history.push(intendedLocation.from.pathname)
-      } */
     else{
       login(credentials);
-      
-      /* setErrorMsg("Authentication Fails. Try again");
-      return false; */
     }
-    //login(credentials, stayLogedIn)
-    
     
   };
   return (

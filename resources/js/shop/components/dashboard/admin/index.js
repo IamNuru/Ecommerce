@@ -16,14 +16,13 @@ import AddDestination from "./destinations/AddDestination";
 import ListDestinations from "./destinations/ListDestinations";
 
 //chats
-import ChatList from "../chat/ChatList";
-import ChatBox from "../chat/ChatBox";
+import ChatList from "./chat/ChatList";
+import ChatBox from "./chat/ChatBox";
 
 const AdminDashboard = () => {
     const history = useHistory();
     return (
         <AdminState>
-            <DestinationState>
                 <>
                     <Header />
                 </>
@@ -81,7 +80,6 @@ const AdminDashboard = () => {
                         </Switch>
                     </div>
                 </div>
-            </DestinationState>
         </AdminState>
     );
 };

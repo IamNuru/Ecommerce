@@ -1,7 +1,7 @@
 import React, { Fragment, useContext, useState , useRef} from "react";
 import { Link, useLocation } from "react-router-dom";
-import AuthContext from "../../context/auth/Context"
-import SettingsContext from "../../context/settings/SettingsContext";
+import AuthContext from "../../context/user/Context"
+import SettingsContext from "../../context/settings/Context";
 import "../../../styles/sidebar.css"
 
 const Sidebar = () => {

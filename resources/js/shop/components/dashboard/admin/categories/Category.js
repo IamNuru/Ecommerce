@@ -1,11 +1,11 @@
 import React, { useContext } from "react";
 import { useHistory } from "react-router-dom";
-import ProductsContext from "../../../context/products/ProductsContext";
+import CategoryContext from "../../../context/category/Context";
 import { Link } from "react-router-dom";
 
 const Category = (props) => {
   const { deleteCategory, getCategories, getCategory } = useContext(
-    ProductsContext
+    CategoryContext
   );
 
   const { category } = props;

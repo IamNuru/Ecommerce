@@ -1,12 +1,12 @@
 import React, { useContext } from "react";
-import CartContext from "../context/cart/CartContext";
+import CartContext from "../context/cart/Context";
 import AuthContext from "../context/auth/Context";
-import SettingsContext from "../context/settings/SettingsContext";
+import SettingsContext from "../context/settings/Context";
 
 import { Link } from "react-router-dom";
 
 const Header = () => {
-  const { logedin } = useContext(AuthContext);
+  const { logedin , user} = useContext(AuthContext);
   const { isNavbarOpen, closeNavbar } = useContext(SettingsContext);
   const { cart } = useContext(CartContext);
 
@@ -64,6 +64,10 @@ const Header = () => {
           <i className="fa fa-cart-plus text-purple-600"></i>
         </Link>
       </div>
+      <div className="hidden md:flex text-blue-600 w-full justify-center text-xl monospace font-semibold">
+        <span className="transform skew-y-12">Nuru</span>
+        <span className="transform -skew-y-12">Boutique</span>
+      </div>
 
       <div className="flex ml-auto mr-4">
         {!logedin ? (
@@ -83,10 +87,20 @@ const Header = () => {
           </div>
         ) : (
           <div className="flex">
-            <Link to="/account" className="px-2 py-1 " title="profiile">
-              <i className="md:hidden fa fa-user-circle"></i>
-              <i className="hidden md:block">Account</i>
-            </Link>
+            {
+              user && user.role === 'admin' 
+              ? <Link to="/admin/area" className="px-2 py-1 " title="profiile">
+                  <i className="md:hidden fa fa-user-circle"></i>
+                  <i className="hidden md:block">Dashboard</i>
+                </Link>
+              :
+              <Link to="/account" className="px-2 py-1 " title="profiile">
+                <i className="md:hidden fa fa-user-circle"></i>
+                <i className="hidden md:block">Account</i>
+              </Link>
+
+            }
+            
           </div>
         )}
         <Link to="/cart"  className="px-2 ml-2">

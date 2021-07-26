@@ -1,6 +1,7 @@
 import React, { useContext } from "react";
 import { Link } from "react-router-dom";
 import CartContext from "../../../context/cart/Context";
+
 const Item = (props) => {
   const { cart, addToCart, removeFromCart } = useContext(CartContext);
 
@@ -18,13 +19,15 @@ const Item = (props) => {
   const removeProductFromCart = () => {
     removeFromCart(product.id);
   };
+
+  
   return (
     <div className="w-full font-serif">
-      <div className="p-1 relative h-full block bg-white shadow-md hover:shadow-xl rounded-lg overflow-hidden">
-        <div className=" pb-48 overflow-hidden">
+      <div className="p-1 h-full block bg-white shadow-md hover:shadow-xl rounded-lg overflow-hidden">
+        <div className="pb-4 overflow-hidden">
           <Link to={`/product/${product.id}`}>
             <img
-              className="object-cover md:w-full inset-0 h-full w-full object-cover"
+              className="object-cover md:w-full inset-0 max-h-80 w-full object-cover"
               src={`${process.env.MIX_APP_URL}/storage/images/products/${product.image}`}
               alt={product.title}
             />
@@ -45,8 +48,8 @@ const Item = (props) => {
             &nbsp;
           </div>
         </div>
-        <div className="block absolute bottom-0">
-          <div className="p-4 border-t border-b text-gray-700">
+        <div className="mt-8">
+          <div className=" p-4 border-t border-b text-gray-700">
             {cart?.length > 0 &&
             cart.filter((item) => item.id === product.id).length > 0 ? (
               <div

@@ -1,6 +1,6 @@
 import React from "react";
 import Chatbot from "react-simple-chatbot";
-import CheckOrderStatus from "./CheckOrderStatus";
+import CheckOrderStatus from "./components/CheckOrderStatus";
 import { ThemeProvider } from "styled-components";
 import "../../styles/chat/style.css";
 import { Link } from "react-router-dom";

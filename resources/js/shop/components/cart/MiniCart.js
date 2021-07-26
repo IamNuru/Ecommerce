@@ -1,7 +1,7 @@
 import React, { useContext } from "react";
 import DataTable from "react-data-table-component";
 import { Link } from "react-router-dom";
-import CartContext from "../context/cart/CartContext";
+import CartContext from "../context/cart/Context";
 
 const MiniCart = () => {
     const { cart } = useContext(CartContext);
@@ -9,17 +9,18 @@ const MiniCart = () => {
     const columns = [
         {
             name: "Title",
-            selector: "title",
+            selector:row => row["title"],
             sortable: true,
             maxWidth: "100px"
         },
         {
             name: "Price",
-            selector: "price",
+            selector:row => row["price"],
             sortable: true,
             right: true
         }
     ];
+
     return (
         <div>
             <DataTable title="Cart Items" columns={columns} data={cart} />

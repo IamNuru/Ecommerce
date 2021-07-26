@@ -1,10 +1,10 @@
 import React, { useContext} from 'react'
 import { Link } from 'react-router-dom';
-import Clothings from '../products/clothings/Clothings';
-import Electronic from '../products/electronic/Electronic';
-import Item from '../products/shoes/Item';
-import Shoes from '../products/shoes/Shoes';
-import CartContext from '../context/cart/CartContext';
+import Clothings from '../products/categories/clothings/Clothings';
+import Electronic from '../products/categories/electronic/Electronic';
+import Item from '../products/categories/shoes/Item';
+import Shoes from '../products/categories/shoes/Shoes';
+import CartContext from '../context/cart/Context';
 
 const Home = () => {
     const { wishList } = useContext(CartContext)

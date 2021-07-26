@@ -13,7 +13,6 @@ use App\Http\Controllers\Auth\ResetPasswordController;
 use App\Http\Controllers\ChatController;
 use App\Http\Controllers\DestinationController;
 use App\Http\Controllers\ProductReviewController;
-use App\Models\Transaction;
 
 /*
 |--------------------------------------------------------------------------
@@ -53,17 +52,20 @@ Route::get('messages/{from_id}/{to_id}', [ChatController::class, 'getAuthUserCha
 
 
 
+
+
+
 // Private routes
 Route::middleware('auth:sanctum')->group(function () {
     //Route::get('/', 'ChatsController@index');
     Route::post('acceptchat/{id}', [ChatController::class, 'acceptChat']);
-    Route::get('user', [UserController::class, 'index']);
+
     Route::get('messages', [ChatController::class, 'fetchMessages']);
     Route::post('message/{from_id}/{to_id}', [ChatController::class, 'sendNewMessage']);
     Route::get('fetch/all/requestedchats', [ChatController::class, 'fetchAllRequestedChats']);
     Route::get('close/chat/{chat_id}', [ChatController::class, 'closeChat']);
-    Route::post('user/update', [UserController::class, 'update']);
-    Route::get('user/address', [UserController::class, 'address']);
+
+
     Route::post('resetpassword', [UserController::class, 'resetpassword']);
     Route::post('category', [CategoryController::class, 'store']);
     Route::post('logout', [UserController::class, 'logout']);
@@ -76,6 +78,29 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::delete('product/{id}', [ProductController::class, 'destroy']);
     Route::delete('category/{id}', [CategoryController::class, 'destroy']);
     Route::post('category/{id}', [CategoryController::class, 'update']);
+
+    
+    //transactions
+    Route::get("sales", [TransactionController::class, 'sales']);
+    Route::get("sales/daterange", [TransactionController::class, 'salesByDateRange']);
+    Route::get("transaction/{id}", [TransactionController::class, 'show']);
+    Route::get("transactions", [TransactionController::class, 'transactions']);
+    Route::post("updateTransactionStatus/{id}", [TransactionController::class, 'updateTransactionStatus']);
+    
+
+    //customers
+    Route::get("customers", [UserController::class, 'customers']);
+    Route::get("customer/{id}", [UserController::class, 'customer']);
+
+
+
+    //user
+    Route::post('user/update', [UserController::class, 'update']);
+    Route::post('user/update/address', [UserController::class, 'updateAddress']);
+    Route::get('user/address', [UserController::class, 'address']);
+    Route::get('user', [UserController::class, 'index']);
+    Route::post('user/destination/{id}', [UserController::class, 'updateUserDestinationId']);
+
 
 
     //destinations
@@ -94,7 +119,6 @@ Route::middleware('auth:sanctum')->group(function () {
 
     //handle payments
     Route::post('verify/transaction/{reference}', [TransactionController::class, 'verify']);
-
 });
 
 

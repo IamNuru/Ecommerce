@@ -12,11 +12,14 @@ use Illuminate\Validation\ValidationException;
 
 class UserController extends Controller
 {
-    
+
     //get authenticated user
-    public function index(Request $request)
+    public function index(User $user)
     {
-        $data = Auth::user();
+        $id = Auth::user()->id;
+        $data = User::with('transactions.orders.products', 'destination', 'address', 'product_review', 'transactions')
+            ->where('id', $id)
+            ->first();
         return response()->json($data);
     }
 
@@ -82,11 +85,15 @@ class UserController extends Controller
     {
         $request->validate([
             'email' => 'required|string|email|max:255|unique:users,email',
+            'firstName' => 'required|string|min:3|max:255',
+            'lastName' => 'required|string|min:3|max:255',
             'password' => 'required|confirmed',
             'gender' => 'required|string',
         ]);
 
         $user = new User();
+        $user->first_name = $request->firstName;
+        $user->last_name = $request->lastName;
         $user->email = $request->email;
         $user->password = bcrypt($request->password);
         $user->gender = $request->gender;
@@ -150,7 +157,7 @@ class UserController extends Controller
         return response(['message' => 'logged out']);
     }
 
-    
+
 
     // update the user profile or user resource
     public function update(Request $request, User $user)
@@ -158,8 +165,8 @@ class UserController extends Controller
         $request->validate([
             'email' => 'nullable|string|email|max:255',
             'gender' => 'required|string',
-            'firstName' => 'nullable|string|min:3|max:50',
-            'lastName' => 'nullable|string|min:3|max:50',
+            'firstName' => 'required|string|min:3|max:50',
+            'lastName' => 'required|string|min:3|max:50',
             'destination' => 'nullable|integer',
             'phone' => 'nullable|integer',
         ]);
@@ -172,7 +179,28 @@ class UserController extends Controller
         $user->phone = $request->phone;
         $user->update();
 
-        return response()->json(['Records updated']);
+        return response()->json('Records updated');
+    }
+
+
+    // update the user address
+    public function updateAddress(Request $request, User $user)
+    {
+        $request->validate([
+            'country' => 'required|string|max:255',
+            'city' => 'required|string|max:255',
+            'state' => 'required|string|max:255',
+            'box' => 'required|string|max:255',
+        ]);
+
+        $user = Auth()->user();
+        $user->address->country = $request->country;
+        $user->address->state = $request->state;
+        $user->address->city = $request->city;
+        $user->address->box = $request->box;
+        $user->address->update();
+
+        return response()->json('Address Updated Successfully');
     }
 
 
@@ -186,48 +214,94 @@ class UserController extends Controller
     }
 
 
-
-
     // get authenticated user destination
     public function destination()
     {
         $id = Auth()->user()->id;
         $userdestination = User::with('destination')
-                        ->where('id', $id)->first();
+            ->where('id', $id)->first();
         return response()->json($userdestination);
+    }
+
+    
+
+    // update user destination
+    public function updateUserDestinationId($destinationId)
+    {
+        $user = Auth()->user();
+        $user->destination_id = $destinationId;
+        $user->update();
+
+        return response()->json("updated");
     }
 
 
 
     //get authenticated user reviews 
-    public function reviews(){
+    public function reviews()
+    {
         $reviews = auth()->user()->reviews()->get();
-        
+
         return response()->json($reviews);
     }
 
 
     //get authenticated user reviews 
-    public function reviewed($id){
-        $revs = auth()->user()->product_review()->where('product_id',$id)->first();
+    public function reviewed($id)
+    {
+        $revs = auth()->user()->product_review()->where('product_id', $id)->first();
 
-        /* foreach ($revs as $rev) {
-            if ($rev->product_id === $id) {
-                return response()->json($rev);
-            }else{
-                return response()->json("Not found");
-            }
-        } */
-        
         return response()->json($revs);
     }
 
 
 
-    public function destroy(User $user)
+    //get all customers in the table
+    //NB customers are users in the table without roles
+    public function customers(Request $request)
     {
-        //
+        $limit = $request->input('limit');
+
+        if ($limit) {
+            $data = User::withCount([
+                'transactions AS total_purchases' => function ($query) {
+                    $query->select(DB::raw("SUM(amount) as totalpurchases"));
+                }
+            ])
+                ->orderBy('total_purchases', 'desc')
+                ->limit($limit)
+                ->get();
+        } else {
+            $data = User::withCount([
+                'transactions AS total_purchases' => function ($query) {
+                    $query->select(DB::raw("SUM(amount) as totalpurchases"));
+                }
+            ])
+                ->with('transactions.orders.products')
+                ->orderBy('total_purchases', 'desc')
+                ->get();
+        }
+
+
+        return response()->json($data);
     }
 
-    
+
+    //get customer / user
+    public function customer($id)
+    {
+        $data = User::withCount([
+            'transactions AS total_purchases' => function ($query) {
+                $query->select(DB::raw("SUM(amount) as totalpurchases"));
+            }
+        ])
+            ->with('destination', 'address', 'transactions.orders.products')
+            ->where('id', $id)
+            ->first();
+
+        return response()->json($data);
+    }
+
+
+
 }

@@ -1,19 +1,91 @@
 import React, { useContext, useEffect } from "react";
+import DataTable from "react-data-table-component";
+import { Link , useHistory} from "react-router-dom";
 
-import Destination from "./Destination";
-import ProductsContext from "../../../context/products/ProductsContext";
+
 import DestinationContext from "../../../context/destination/Context";
-import { Link } from "react-router-dom";
+
 
 const ListDestinations = () => {
   // destructure values from context
-  const {  success } = useContext(ProductsContext);
-  const { destinations, getDestinations } = useContext(DestinationContext);
+  const {success, destinations,deleteDestination, getDestinations, getDestination, destination } = useContext(DestinationContext);
+
+  const history = useHistory();
+
+  const editDestination = (id) => {
+    getDestination(id);
+    history.push("/admin/area/destination");
+  };
+  const deleteDes = (id) => {
+    if (window.confirm("Are you sure you want to Delete")) {
+      deleteDestination(id);
+      getDestinations();
+    }
+  };
+
   useEffect(() => {
       getDestinations();
 
     // eslint-disable-next-line
   }, []);
+
+
+  //data table variables
+  const customStyles = {
+    headCells: {
+      style: {
+        paddingLeft: '8px', // override the cell padding for head cells
+        paddingRight: '8px',
+        backgroundColor: "rgba(37, 99, 235)",
+        fontSize: "1rem",
+        fontWeight: "400",
+      }
+  }
+}
+  const columns = [
+    {
+        name: "Name",
+        selector: row => row["name"],
+        sortable: true
+    },
+    {
+        name: "Station",
+        selector: row => row["station"],
+        sortable: true
+    },
+    {
+        name: "Phone",
+        selector: row => row["phone"],
+        sortable: true
+    },
+    {
+        name: "Days",
+        selector: row => row["number_of_days"],
+        sortable: true
+    },
+    {
+        name: "Charge",
+        selector: row => row["amount"],
+        sortable: true
+    },
+    {
+      name: "",
+      cell: row => (
+          <div className="flex">
+              <i
+                  onClick={() => editDestination(row.id)}
+                  className="fa fa-edit text-md font-semibold text-blue-600 px-1 text-md cursor-pointer"
+              >
+              </i>
+              <i
+                  onClick={() => deleteDes(row.id)}
+                  className="fa fa-trash text-md font-semibold text-red-600 px-1 text-md cursor-pointer mx-1"
+              ></i>
+          </div>
+      ),
+      right: true
+    },
+  ]
 
   return (
     <div>
@@ -24,35 +96,15 @@ const ListDestinations = () => {
       </div>
     <div className="m-auto px-4 block">
       
-      <table className="w-full text-sm lg:text-base" cellSpacing="0">
-        <thead>
-          <tr className="h-12 uppercase">
-            <th className="text-left">Name</th>
-            <th className="text-center md:table-cell">Station</th>
-            <th className="text-center md:table-cell">Phone</th>
-            <th className="text-center md:table-cell">Days to Arrive</th>
-            <th className="text-center md:table-cell">Charge</th>
-            <th className="text-center md:table-cell"></th>
-          </tr>
-        </thead>
-        <tbody>
-          {destinations !== null ?
-          destinations.length > 0 ? (
-            destinations.map((destination, index) => {
-              return <Destination destination={destination} key={index} />;
-            })
-          ) : (
-            <tr className="text-center">
-              <td>No destinations yet</td>
-            </tr>
-          ):(
-            <tr className="text-center">
-              <td>Loading</td>
-            </tr>
-          )
-        }
-        </tbody>
-      </table>
+    {destinations?.length > 0 && (
+            <DataTable
+                title="Products"
+                columns={columns}
+                data={destinations}
+                customStyles={customStyles}
+                pagination={true}
+            />
+        )}
       {success && (
         <div className="py-4 text-blue-800 text-md italic text-center">
           {success.message}

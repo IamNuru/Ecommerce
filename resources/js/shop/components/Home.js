@@ -1,23 +1,26 @@
 import React from "react";
 import Main from "./Main";
 import { Switch, Route } from "react-router-dom";
-import Profile from "./profile/Profile";
 import ProtectedRoute from "./routes/ProtectedRoute";
 import AdminRoute from "./routes/AdminRoute";
-import ProfileMain from "./profile/ProfileMain";
 import Help from "./Help";
 import Chat from "./chatbot/Chat"
-import RequestLiveChatForm from "./dashboard/chat/RequestLiveChatForm";
-import UserChatBox from "./dashboard/chat/UserChatBox";
+import RequestLiveChatForm from "./dashboard/admin/chat/RequestLiveChatForm";
+import UserChatBox from "./dashboard/admin/chat/UserChatBox";
 import AdminDashboard from "./dashboard/admin";
+import ProfileMain from "./dashboard/profile/ProfileMain";
+import Profile from "./dashboard/profile/Profile";
+import Dashboard from "./adminDashboard/pages/Dashboard";
+
 
 const Home = (props) => {
   return (
     <div className="h-full">
       <Switch>
 
-        <AdminRoute exact path="/admin/area" component={AdminDashboard}/>
-        <AdminRoute exact path="/admin/area/*" component={AdminDashboard}/>
+        <Route exact path="/admin" component={Dashboard}/>
+        <AdminRoute exact path="/admin/area" component={Dashboard}/>
+        <AdminRoute exact path="/admin/area/*" component={Dashboard}/>
         <ProtectedRoute exact path="/account" component={Profile} />
         <ProtectedRoute exact path="/account/*" component={ProfileMain}/>
         <Route exact path="/help" component={Help}/>

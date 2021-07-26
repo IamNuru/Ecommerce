@@ -1,5 +1,6 @@
 import React, { useContext, useState, useEffect } from "react";
-import ProductsContext from "../../../context/products/ProductsContext";
+import ProductsContext from "../../../context/products/Context";
+import CategoryContext from "../../../context/category/Context";
 import { Link } from "react-router-dom";
 
 const AddProduct = () => {
@@ -8,14 +9,17 @@ const AddProduct = () => {
     errors,
     addProduct,
     updateProduct,
-    categories,
     success,
-    getCategories,
     setProductToNull,
     clearMessages,
     formloading,
     setFormLoading
   } = useContext(ProductsContext);
+  const {
+    categories,
+    getCategories,
+  } = useContext(CategoryContext);
+
 
   //set data state
   const [data, setData] = useState({

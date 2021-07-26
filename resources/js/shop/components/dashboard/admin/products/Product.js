@@ -1,6 +1,6 @@
 import React, { useContext } from "react";
 import { useHistory } from "react-router";
-import ProductsContext from "../../../context/products/ProductsContext";
+import ProductsContext from "../../../context/products/Context";
 
 const Product = (props) => {
   const { product } = props;

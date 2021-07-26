@@ -6,6 +6,7 @@ use App\Models\Order;
 use App\Models\Product;
 use App\Models\User;
 use App\Models\Transaction;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Config;
@@ -14,11 +15,7 @@ use Paystack;
 
 class TransactionController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
+    //get auth user transactions
     public function index()
     {
         $uid = auth()->user()->id;
@@ -26,15 +23,14 @@ class TransactionController extends Controller
         return response()->json($data);
     }
 
+
+
     /**
      * Store a newly created resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
+     * 
      */
     public function store(Request $request)
     {
-
         $request->validate([
             'amount' => 'required',
             'payment_method' => 'required|string',
@@ -69,18 +65,10 @@ class TransactionController extends Controller
                 }
             };
         } else {
-            dd('Something went wrong');
+            
         }
 
-
-
         return response()->json(['message' => 'Order successfuly placed']);
-    }
-
-
-    //fetch items purchased today
-    public function purchasedToday(){
-        $data = Transaction::with("orders.products")->where()->get();
     }
 
 
@@ -97,37 +85,9 @@ class TransactionController extends Controller
     }
 
 
-    public function show(Transaction $transaction)
-    {
-        //
-    }
-
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  \App\Models\Transaction  $transaction
-     * @return \Illuminate\Http\Response
-     */
-    public function update(Request $request, Transaction $transaction)
-    {
-        //
-    }
-
-    
-
-
-
-    public function destroy(Transaction $transaction)
-    {
-        //
-    }
-
-
     //verify transactions
     public function verify(Request $request, $reference)
     {
-        
         $SECRET_KEY = config('paystack.secretKey');
         $curl = curl_init();
 
@@ -192,11 +152,82 @@ class TransactionController extends Controller
                     }
                 };
             });
-
-            //return response()->json(['message' => 'Order successfuly placed']);
-
             return response()->json($dt->data);
-
         }
+    }
+
+
+
+    //fetch items sold
+    public function sales(Request $request)
+    {
+        $dur =  $request->input('duration');
+        if ($dur === "all") {
+            $data = Transaction::with("orders.products", 'user')
+                ->get();
+        } else if ($dur === "daily") {
+            $data = Transaction::with("orders.products", 'user')
+                ->whereDate('created_at', Carbon::today())
+                ->get();
+        } else if ($dur === "weekly") {
+            $data = Transaction::with("orders.products", 'user')
+                ->whereBetween('created_at', [Carbon::now()->startOfWeek(), Carbon::now()->endOfWeek()])
+                ->get();
+
+            return response()->json($data);
+        } else if ($dur === "monthly") {
+            $data = Transaction::with("orders.products", 'user')
+                ->whereBetween('created_at', [Carbon::now()->startOfMonth(), Carbon::now()->endOfMonth()])
+                ->get();
+
+            return response()->json($data);
+        } else {
+            $data = Transaction::with("orders.products")
+                ->whereDate('created_at', Carbon::today())
+                ->get();
+        }
+
+        return response()->json($data);
+    }
+
+
+
+    //get sales by date range
+    public function salesByDateRange(Request $request){
+        $data  = Transaction::with('orders.products')
+                ->whereBetween('created_at',[$request->from, $request->to])
+                ->OrderByDesc('id')
+                ->get();
+
+                return response()->json($data);
+    }
+    
+
+    //get all transactions
+    public function transactions(){
+        $data  = Transaction::with('orders.products')->OrderByDesc('id')
+                ->get();
+
+        return response()->json($data);
+    }
+
+
+
+    //get transaction details
+    public function show($id){
+        $data  = Transaction::with('orders.products','user.destination')
+        ->where('id',"=", $id)
+        ->first();
+
+        return response()->json($data);
+    }
+
+
+    public function updateTransactionStatus(Request $request, $id){
+        $transaction = Transaction::findOrFail($id);
+        $transaction->status = $request->status;
+        $transaction->update();
+
+        return response()->json('Transaction Status Successfully Updated');
     }
 }

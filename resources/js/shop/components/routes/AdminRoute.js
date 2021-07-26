@@ -1,7 +1,7 @@
 import React, { useContext, useEffect, useState } from "react"
 import axios from 'axios';
 import { Route, Redirect } from "react-router-dom"
-import AuthContext from "../context/auth/Context"
+import AuthContext from "../context/user/Context"
 
 const AdminRoute = ({ component: Component, ...rest}) => {
     const {  user  } = useContext(AuthContext);

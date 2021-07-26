@@ -1,5 +1,5 @@
 import React, { useContext } from "react";
-import CartContext from "../context/cart/CartContext";
+import CartContext from "../context/cart/Context";
 import MiniCart from "../cart/MiniCart";
 import Home from "./Main";
 
@@ -14,7 +14,7 @@ const MainPage = props => {
                     {cart && cart.length > 0 ? (
                         <MiniCart />
                     ) : (
-                        <p className="text-md text-gray-700">
+                        <p className="text-md text-gray-600 font-medium font-mono">
                             You are yet to add something to your cart. Start adding stuffs to your cart
                         </p>
                     )}

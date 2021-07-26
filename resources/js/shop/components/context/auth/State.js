@@ -9,25 +9,20 @@ import {
   REGISTER,
   LOGIN,
   LOGOUT,
-  ADD_TO_ORDERS,
   ERRORS,
-  GET_ORDERS,
   GET_USER,
   CLEAR_MESSAGES,
   SUCCESS_MESSAGES,
   SET_lOADING,
   SET_LOGED_IN,
-  UPDATE_USER,
   SET_FORM_lOADING,
-  GET_DESTINATION,
 } from "../types";
 
+
 const AuthState = (props) => {
+
   const initialState = {
-    users: [],
     user: null,
-    userDestination: null,
-    orders: [],
     errors: null,
     success: null,
     logedin: false,
@@ -36,6 +31,7 @@ const AuthState = (props) => {
   };
 
   const [state, dispatch] = useReducer(AuthReducer, initialState);
+
 
   //set configuration for making request
   const config = {
@@ -46,12 +42,16 @@ const AuthState = (props) => {
     },
   };
 
+
+
   //get token from localstorage if found
   if (localStorage.getItem("token")) {
     initialState.logedin = true;
   } else {
     initialState.logedin = false;
   }
+
+
 
   //get authenticated user object
   useEffect(() => {
@@ -87,7 +87,8 @@ const AuthState = (props) => {
     };
     getAuthUser()
     // eslint-disable-next-line
-  }, [window.location.href, initialState.user, initialState.logedin]);
+  }, [initialState.user, initialState.logedin]);
+
 
 
   /** *** ACTIONS *** */
@@ -110,6 +111,8 @@ const AuthState = (props) => {
       });
   };
 
+
+
   //log user in
   const login = async (user) => {
     await axios
@@ -129,6 +132,8 @@ const AuthState = (props) => {
       });
   };
 
+
+
   //set the logedin status
   const setLogedIn = (logedinValue) =>{
     dispatch({
@@ -136,6 +141,8 @@ const AuthState = (props) => {
       payload: logedinValue
     });
   }
+
+
 
   //Clear all errors on the page such as form errors
   const setError = (err) => {
@@ -145,12 +152,16 @@ const AuthState = (props) => {
     });
   };
 
+
+
   //log user out
   const logout = () => {
     dispatch({
       type: LOGOUT,
     });
   };
+
+
 
   //Reset user that forgot his/her password
   const resetPassword = async (credentials) => {
@@ -159,7 +170,7 @@ const AuthState = (props) => {
       .then((res) => {
         dispatch({
           type: SUCCESS_MESSAGES,
-          payload: res.data.message,
+          payload: res.data,
         });
       })
       .catch((err) => {
@@ -171,30 +182,8 @@ const AuthState = (props) => {
       });
   };
 
-  //update logged in user details
-  const updateUser = async (credentials) => {
-    await axios
-      .post(
-        `${process.env.MIX_APP_API_URL}/user/update`,
-        credentials,
-        config
-      )
-      .then((res) => {
-        dispatch({
-          type: UPDATE_USER,
-          payload: res.data,
-        });
-      })
-      .catch((err) => {
-        var obj = err.response.data.errors ? err.response.data.errors : "";
-        console.log(obj)
-        dispatch({
-          type: ERRORS,
-          payload: obj,
-          //payload: obj[Object.keys(obj)[0]],
-        });
-      });
-  };
+
+
   //update logged in user password
   const updatePassword = async (credentials) => {
     await axios
@@ -206,7 +195,7 @@ const AuthState = (props) => {
       .then((res) => {
         dispatch({
           type: SUCCESS_MESSAGES,
-          payload: res.data.message,
+          payload: res.data,
         });
       })
       .catch((err) => {
@@ -217,6 +206,8 @@ const AuthState = (props) => {
         });
       });
   };
+
+
 
   //forgot password
   const sendPasswordResetLink = async (credentials) => {
@@ -239,62 +230,7 @@ const AuthState = (props) => {
       });
   };
 
-  //add to order
-  const addToOrders = async (order) => {
-    await axios
-      .post(`${process.env.MIX_APP_API_URL}/order`, order, config)
-      .then((res) => {
-        dispatch({
-          type: ADD_TO_ORDERS,
-          payload: res.data[0],
-        });
-      })
-      .catch((err) => {
-        var obj = err.response.data.errors ? err.response.data.errors : "";
-        dispatch({
-          type: ERRORS,
-          payload: obj[Object.keys(obj)[0]],
-        });
-      });
-  };
-  //accept c
-  const acceptC = async (id) => {
-    await axios
-      .post(`${process.env.MIX_APP_API_URL}/initchat/${id}`, config)
-      .then((res) => {
-        console.log(res)
-      })
-      .catch((err) => {
-        console.log(err.response)
-      });
-  };
 
-  //get authenticated user orders
-  const getOrders = async () => {
-    axios
-      .get(`${process.env.MIX_APP_API_URL}/orders`, config)
-      .then((res) => {
-        dispatch({
-          type: GET_ORDERS,
-          payload: res.data[0].transactions,
-        });
-      })
-      .catch((err) => {});
-  };
-
-
-  //get user destination
-  const getUserDestination = () =>{
-    axios.get(`${process.env.MIX_APP_API_URL}/user/destination`, config)
-        .then(res =>{
-            dispatch({
-              type: GET_DESTINATION,
-              payload: res.data.destination
-            })
-        }).catch(err =>{
-            
-        })
-  }
 
   //Clear messages if any
   const clearMessages = () => {
@@ -302,6 +238,8 @@ const AuthState = (props) => {
       type: CLEAR_MESSAGES,
     });
   };
+
+
 
   //Clear messages if any
   const setLoading = (loadValue) => {
@@ -311,6 +249,8 @@ const AuthState = (props) => {
     });
   };
 
+
+  
   //Set state of form when clicked
   const setFormLoading = (loadingValue) => {
     dispatch({
@@ -325,31 +265,23 @@ const AuthState = (props) => {
     <AuthContext.Provider
       value={{
         user: state.user,
-        users: state.users,
         logedin: state.logedin,
-        orders: state.orders,
         errors: state.errors,
         success: state.success,
         formloading: state.formloading,
         loading: state.loading,
-        userDestination: state.userDestination,
         config,
         login,
         register,
         logout,
-        updateUser,
         updatePassword,
         resetPassword,
-        addToOrders,
         setError,
-        getOrders,
         clearMessages,
         sendPasswordResetLink,
         setFormLoading,
         setLoading,
         setLogedIn,
-        getUserDestination,
-        acceptC,
       }}
     >
       {props.children}

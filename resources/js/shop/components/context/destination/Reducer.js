@@ -7,7 +7,9 @@ import {
     ADD_DESTINATION,
     UPDATE_DESTINATION,
     DELETE_DESTINATION,
-    CLEAR_MESSAGES
+    CLEAR_MESSAGES,
+    SET_lOADING,
+    SET_SHIPPING_CHARGE
 } from "../types";
 
 const DestinationReducer = (state, action) => {
@@ -33,7 +35,22 @@ const DestinationReducer = (state, action) => {
             return {
                 ...state,
                 destination: action.payload,
-                loading: false
+                loading: false,
+                shippingCharge: action.payload.amount && parseInt(action.payload.amount)
+            };
+
+
+        case SET_SHIPPING_CHARGE:
+            return {
+                ...state,
+                shippingCharge: action.payload,
+            };
+        
+
+        case SET_lOADING:
+            return {
+                ...state,
+                loading: action.payload
             };
 
         case SET_FORM_lOADING:
@@ -41,7 +58,7 @@ const DestinationReducer = (state, action) => {
                 ...state,
                 formloading: action.payload
             };
-            
+
         case CLEAR_MESSAGES:
             return {
                 ...state,
