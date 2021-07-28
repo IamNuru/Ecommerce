@@ -18,9 +18,6 @@ const Home = (props) => {
     <div className="h-full">
       <Switch>
 
-        <Route exact path="/admin" component={Dashboard}/>
-        <AdminRoute exact path="/admin/area" component={Dashboard}/>
-        <AdminRoute exact path="/admin/area/*" component={Dashboard}/>
         <ProtectedRoute exact path="/account" component={Profile} />
         <ProtectedRoute exact path="/account/*" component={ProfileMain}/>
         <Route exact path="/help" component={Help}/>
