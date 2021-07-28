@@ -12,10 +12,11 @@ const About = () => {
         formloading,
         setFormLoading,
         success,
+        setError
     } = useContext(UserContext);
 
     const { destinations, getDestinations } = useContext(DestinationContext);
-    const importFile = useRef(null)
+    const userImage = useRef(null)
     //iniatilise states
     const [data, setData] = useState({
         firstName: "",
@@ -27,7 +28,7 @@ const About = () => {
         destination: "",
         gender: "m",
     });
-    const [importFileName, setImportFileName] = useState(null)
+    const [userImageName, setUserImageName] = useState(null)
     const [editMode, setEditMode] = useState(false);
     const [err, setErr] = useState()
 
@@ -41,8 +42,9 @@ const About = () => {
                 email: user.email != null ? user.email : "",
                 phone: user.phone != null ? user.phone : "",
                 destination: user.destination_id !== null ? user.destination_id : "",
-                gender: user.gender !== null ? user.gender : ""
+                gender: user.gender !== null ? user.gender : "",
             });
+            setUserImageName(null)
         }
     }, [user]);
 
@@ -69,17 +71,18 @@ const About = () => {
         setEditMode(true);
         setErr(null)
     };
-    //when gender select button is clicked
-    const onGenderSelect = e => {
-        setGender(e.target.value);
-        setEditMode(true);
-    };
+    
 
     //set the disable of the input to false
     const setInputOfDisable = e => {
         e.target.previousSibling.disabled = false;
         e.target.previousSibling.focus();
     };
+
+    const handleChooseFile = e =>{
+        setUserImageName(userImage.current.files[0].name)
+        setEditMode(true)
+      }
 
     //save changes
     const saveChanges = e => {
@@ -100,14 +103,12 @@ const About = () => {
             formData.append("gender", gender);
             formData.append("destination", destination);
             formData.append("phone", phone);
+            formData.append("image_name", userImage.current.files[0]);
             updateUser(formData);
         }
     };
 
-    const handleChooseFile = e =>{
-        setImportFileName(importFile.current.files[0].name)
-        setEditMode(true)
-      }
+    
 
 
 
@@ -258,18 +259,18 @@ const About = () => {
                     </div>
                     <div className="grid" style={{gridTemplateColumns: "auto 1fr"}}>
                     <div className="relative mx-1">
-                        <button className="w-24 bg-indigo-600 hover:bg-indigo-dark text-white font-bold py-2 px-4 w-full inline-flex items-center">
+                        <div className="cursor-pointer w-24 bg-indigo-600 hover:bg-indigo-dark text-white font-bold py-2 px-4 w-full inline-flex items-center">
                             <svg className="h-4 w-4" height="18" viewBox="0 0 24 24" width="18" xmlns="http://www.w3.org/2000/svg">
                                 <path className="fill-current text-white bg-white" d="M5 8.5c0-.828.672-1.5 1.5-1.5s1.5.672 1.5 1.5c0 .829-.672 1.5-1.5 1.5s-1.5-.671-1.5-1.5zm9 .5l-2.519 4-2.481-1.96-4 5.96h14l-5-8zm8-4v14h-20v-14h20zm2-2h-24v18h24v-18z"/>
                             </svg>
                             <span className="ml-2">Upload Image</span>
-                        </button>
-                        <input onChange={() => handleChooseFile()} ref={importFile} className="py-2 cursor-pointer top-0 absolute block opacity-0 w-24 pin-r pin-t" type="file" name="vacancyImageFiles" />
+                        </div>
+                        <input onChange={handleChooseFile} ref={userImage} className="-mt-1 w-full z-30 py-2 cursor-pointer top-0 absolute block opacity-0 w-24 pin-r pin-t" type="file" name="userImage" />
                         </div>
                         {
-                            importFileName && importFileName !== '' && <div className="flex">
-                            <div className="py-1">{importFileName}&nbsp; 
-                            <span onClick={() => setImportFileName(null)}
+                            userImageName && userImageName !== '' && <div className="flex">
+                            <div className="py-1">{userImageName}&nbsp; 
+                            <span onClick={() => setUserImageName(null)}
                                 className="text-pink-600 text-xs font-semibold cursor-pointer">remove</span>
                             </div>
                          </div>

@@ -62,6 +62,8 @@ export const GET_ELECTRONICS = "GET_ELECTRONICS"
 export const GET_RELATED_PRODUCTS = "GET_RELATED_PRODUCTS"
 
 
+
+
 // website settings
 export const NAVBAR_TOGGLE = "NAVBAR_TOGGLE"
 export const CLOSE_NAVBAR = "CLOSE_NAVBAR"
@@ -76,7 +78,6 @@ export const GET_ALL_PRODUCTS = "GET_ALL_PRODUCTS"
 export const GET_PRODUCT = "GET_PRODUCT"
 export const SEARCH_PRODUCTS = "SEARCH_PRODUCTS"
 export const GET_CATEGORY_PRODUCTS = "GET_CATEGORY_PRODUCTS"
-export const GET_BRANDS = "GET_BRANDS"
 
 
 //Category Variables
@@ -85,6 +86,15 @@ export const DELETE_CATEGORY = "DELETE_CATEGORY"
 export const UPDATE_CATEGORY = "UPDATE_CATEGORY"
 export const GET_CATEGORIES = "GET_CATEGORIES"
 export const GET_CATEGORY = "GET_CATEGORY"
+
+
+//Brand Variables
+export const ADD_BRAND = "ADD_BRAND"
+export const DELETE_BRAND = "DELETE_BRAND"
+export const UPDATE_BRAND = "UPDATE_BRAND"
+export const GET_BRANDS = "GET_BRANDS"
+export const GET_BRAND = "GET_BRAND"
+export const GET_BRAND_PRODUCTS = "GET_BRAND_PRODUCTS"
 
 
 //reviews variables

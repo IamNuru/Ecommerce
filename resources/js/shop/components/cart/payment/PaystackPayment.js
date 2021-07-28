@@ -80,7 +80,6 @@ useEffect(() => {
   // eslint-disable-next-line
 }, [destination, couponWorth, shippingCharge, cartTotal ])
 
-  
   //configuration to send to paysatack
   const config = {
     reference: new Date().getTime(),

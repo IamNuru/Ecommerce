@@ -5,12 +5,15 @@ import Electronic from '../products/categories/electronic/Electronic';
 import Item from '../products/categories/shoes/Item';
 import Shoes from '../products/categories/shoes/Shoes';
 import CartContext from '../context/cart/Context';
+import HomePageCarousel from './HomePageCarousel';
+
 
 const Home = () => {
     const { wishList } = useContext(CartContext)
 
     return (
-        <div className="block p-2">
+        <div className="block w-full p-2">
+            <HomePageCarousel />
                 <div className="bg-white px-4 pt-2 pb-16 shoes mb-4 shadow-md">
                     <h2 className="mb-1 font-serif font-bold text-xl capitalize py-1 pl-2 bg-purple-600 text-white">
                         <Link to="/category/shoes">Shoes</Link>
@@ -23,13 +26,6 @@ const Home = () => {
                         <Link to="/category/clothings"> Clothings</Link>
                     </h2>
                     <Clothings />
-                </div>
-
-                <div className="bg-white px-4 pt-2 pb-16 mb-4 shadow-md">
-                    <h2 className="mb-1 font-serif font-bold text-xl capitalize py-1 pl-2 bg-purple-600 text-white">
-                        <Link to="/category/electronics">Electronics</Link>
-                    </h2>
-                    <Electronic />
                 </div>
 
                 {wishList?.length > 0 && (

@@ -25,6 +25,8 @@ import Profile from "../../dashboard/profile/profile-page/Profile";
 import Customers from "../partials/customers/Customers"
 import Customer from "../partials/customers/Customer"
 import Transactions from "../partials/transactions/Transactions";
+import AddBrand from "../../dashboard/admin/brands/AddBrand";
+import ListBrands from "../../dashboard/admin/brands/ListBrands";
 
 function Dashboard() {
     const [sidebarOpen, setSidebarOpen] = useState(false);
@@ -80,7 +82,7 @@ function Dashboard() {
                             />
                             <AdminRoute
                                 exact
-                                path="/admin/area/chat/:from_id/:name"
+                                path="/admin/area/chat/:id/:name"
                                 component={UserChatBox}
                             />
                             <AdminRoute
@@ -133,6 +135,20 @@ function Dashboard() {
                                 path="/admin/area/trackorder"
                                 component={TrackOrder}
                             />
+                            <AdminRoute
+                                exact
+                                path="/admin/area/brand"
+                                component={AddBrand}
+                            />
+                            <AdminRoute
+                                exact
+                                path="/admin/area/brands"
+                                component={ListBrands}
+                            />
+
+
+
+
 
 
 

@@ -6,12 +6,13 @@ import CartContext from "../../context/cart/Context";
 import Formatter from "../../inc/Formatter";
 
 const SuccessOrder = props => {
-    const { user } = useContext(UserContext);
+    const {refreshUser, user } = useContext(UserContext);
     const { clearCart } = useContext(CartContext);
 
     useEffect(() => {
         if (props) {
             clearCart();
+            refreshUser()
         }
         // eslint-disable-next-line
     }, [props, user]);

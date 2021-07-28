@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\ChatController;
+use App\Http\Controllers\ImportExportController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\ReactController;
 use App\Http\Controllers\PaymentController;
@@ -18,7 +19,8 @@ Route::get('/payment/callback', [PaymentController::class, 'handleGatewayCallbac
 Route::get('/p/r', [PaymentController::class, 'getPay']);
 
 //import and exports
-Route::get('products/export',[ProductController::class, 'export']);
+Route::get('products/export',[ImportExportController::class, 'productsExport']);
+Route::post('products/import',[ImportExportController::class, 'productsImport']);
 
 
 

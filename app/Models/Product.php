@@ -11,6 +11,8 @@ class Product extends Model
 {
     use HasFactory;
 
+    protected $guarded = [];
+
     public function category(){
         return $this->belongsTo(Category::class, 'category_id', 'id');
     }
@@ -21,5 +23,10 @@ class Product extends Model
     //Each product can have many reviews
     public function reviews(){
         return $this->hasMany(ProductReview::class);
+    }
+
+
+    public function brands(){
+        return $this->hasOne(Brand::class);
     }
 }

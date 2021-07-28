@@ -1,39 +1,41 @@
 import React, { useState, useContext, useEffect, useRef } from "react";
 import ProductsContext from "../../context/products/Context";
 import "../../../styles/homepage.css";
+import BrandContext from "../../context/brand/Context";
 
 const SortProducts = () => {
     const {
-        products,
         filterProductsBy,
         sortProductsBy,
-        getBrands,
         allproducts,
         getAllProducts
     } = useContext(ProductsContext);
+    const {
+        brands,
+        getBrands,
+    } = useContext(BrandContext);
 
     const [toggleFilter, setToggleFilter] = useState(false);
     const [search, setSearch] = useState("");
     const [brand, setBrand] = useState([]);
-    const [brands, setBrands] = useState([]);
 
     const text = useRef("");
 
     useEffect(() => {
         getBrands();
 
-        const t =
+        /* const t =
             allproducts &&
             allproducts.filter(
                 (v, i, a) => i === a.findIndex(p => p.brand === v.brand)
             );
-
+console.log(t)
         allproducts &&
             t.map(e => {
                 if (!brands.find(i => i.id === e.id)) {
-                    brands.push({ name: e.brand, id: e.id });
+                    brands.push(...brands, { name: e.brand, id: e.id });
                 }
-            });
+            }); */
     }, [allproducts]);
 
     const toggle = () => {
@@ -49,10 +51,10 @@ const SortProducts = () => {
     };
 
     const handleSelectedBrands = async e => {
-        let newArray = [...brand, e.target.id];
+        let newArray = [...brand, e.target.value];
 
-        if (brand.includes(e.target.id)) {
-            newArray = newArray.filter(b => b !== e.target.id);
+        if (brand.includes(e.target.value)) {
+            newArray = newArray.filter(b => b !== e.target.value);
         }
         await setBrand(newArray);
         filterProductsBy("brands", newArray);
@@ -157,11 +159,9 @@ const SortProducts = () => {
                                               <input
                                                   type="checkbox"
                                                   name=""
-                                                  id={b.name}
-                                                  value={b.name}
-                                                  onChange={
-                                                      handleSelectedBrands
-                                                  }
+                                                  id={b.id}
+                                                  value={b.id ? b.id : ''}
+                                                  onChange={handleSelectedBrands }
                                                   className="cursor-pointer px-1 mt-1 border-1 outline-none"
                                               />
                                               <span className="px-1 text-gray-600 capitalize">

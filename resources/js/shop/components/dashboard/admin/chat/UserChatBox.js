@@ -1,8 +1,7 @@
 import React, { useEffect, useState, useContext } from "react";
-import axios from "axios";
 import { Link } from "react-router-dom";
 
-const UserChatBox = props => {
+const agentChatBox = props => {
     const config = {
         headers: {
             "Content-Type": "application/json",
@@ -12,86 +11,71 @@ const UserChatBox = props => {
     };
 
     const [id] = useState(props.match.params.id);
-    const [username, setUsername] = useState(props.match.params.name);
+    const [agentname, setAgentName] = useState(props.match.params.name);
     const [message, setMessage] = useState("");
     const [messages, setMessages] = useState([]);
     const [sent, setSent] = useState(false);
     const [chatInfo, setChatInfo] = useState(null);
-    const [from, setFrom] = useState(null);
+    const [agent, setAgent] = useState(null);
     const [closeChatting, setCloseChatting] = useState(false);
 
     const onChange = e => {
         setMessage(e.target.value);
     };
 
-    //find if chat user exist
+    //find if chat agent exist
     useEffect(() => {
         
-        const getChatUser = async () => {
+        const getChatagent = async () => {
             await axios
-                .get(
-                    `${process.env.MIX_APP_API_URL}/find/chat/user/${id}`,
-                    config
-                )
+                .get(`${process.env.MIX_APP_API_URL}/find/chat/user/${id}`, config)
                 .then(res => {
                     setChatInfo(res.data);
-                    setFrom(res.data.user_id)
+                    setAgent(res.data.user_id)
                 })
                 .catch(err => {
                     setChatInfo(null);
                 });
         };
-        
-        getChatUser();
+        getChatagent();
 
-        /* return () => {
-            setChatInfo(null);
-        }; */
     }, [sent]);
+
 
     useEffect(() => {
         const fetchMessages = async () => {
             await axios
-                .get(
-                    `${process.env.MIX_APP_API_URL}/messages/${id}/${from && from}`,
-                    config
-                )
+                .get(`${process.env.MIX_APP_API_URL}/messages/${id}/${agent}`, config)
                 .then(res => {
                     setMessages(res.data);
                     setSent(false);
-                })
-                .catch(err => {
-                    console.log("non");
-                });
+                }).catch(err => {});
         };
 
         fetchMessages();
         Echo.channel("shop").listen("MessageSent", e => {
-            messages.push({ message: e.message });
-            //setMessages({message: [...message , e.message]})
+            messages.push({ message: e.message.message });
+            setSent(true)
             if (e.message.message === "The chat session is closed") {
                 setCloseChatting(true);
             }
         });
 
         // eslint-disable-next-line
-    }, [sent, from]);
+    }, [sent, agent]);
+
+
 
     const sendMessage = e => {
         e.preventDefault();
         setSent(true);
         const data = { message: message };
         axios
-            .post(
-                `${process.env.MIX_APP_API_URL}/message/from/user/${id}/${from}`,
-                data,
-                config
-            )
+            .post(`${process.env.MIX_APP_API_URL}/message/${id}/${agent}`, data, config)
             .then(res => {
                 setSent(false);
                 setMessage("");
-            })
-            .catch(err => {
+            }).catch(err => {
                 setSent(false);
             });
     };
@@ -103,14 +87,10 @@ const UserChatBox = props => {
                     <nav className="w-full h-10 bg-gray-900 rounded-tr rounded-tl flex justify-between items-center">
                         <div className="flex justify-center items-center">
                             <i className="mdi mdi-arrow-left font-normal text-gray-300 ml-1"></i>
-                            <img
-                                src="https://i.imgur.com/IAgGUYF.jpg"
-                                className="rounded-full ml-1"
-                                width="25"
-                                height="25"
-                            />
+                            <svg className="bg-white rounded-full shadow-xl" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><path className="h-6 w-6" d="M20.822 18.096c-3.439-.794-6.64-1.49-5.09-4.418 4.72-8.912 1.251-13.678-3.732-13.678-5.082 0-8.464 4.949-3.732 13.678 1.597 2.945-1.725 3.641-5.09 4.418-3.073.71-3.188 2.236-3.178 4.904l.004 1h23.99l.004-.969c.012-2.688-.092-4.222-3.176-4.935z"/></svg> 
+
                             <span className="text-xs capitalize font-medium text-gray-300 ml-1">
-                                {username && username}
+                                {agentname && agentname}
                             </span>
                         </div>
                         <div className="flex items-center">
@@ -130,13 +110,8 @@ const UserChatBox = props => {
                                     <div key={i}>
                                         {id && id == m.to_id ? (
                                             <div className="flex items-center pt-2 pr-10">
-                                                <img
-                                                    src="https://i.imgur.com/IAgGUYF.jpg"
-                                                    className="rounded-full shadow-xl"
-                                                    width="15"
-                                                    height="15"
-                                                    style={{ boxShadow: "" }}
-                                                />
+                                                 <svg className="rounded-full shadow-xl" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><path className="h-6 w-6" d="M20.822 18.096c-3.439-.794-6.64-1.49-5.09-4.418 4.72-8.912 1.251-13.678-3.732-13.678-5.082 0-8.464 4.949-3.732 13.678 1.597 2.945-1.725 3.641-5.09 4.418-3.073.71-3.188 2.236-3.178 4.904l.004 1h23.99l.004-.969c.012-2.688-.092-4.222-3.176-4.935z"/></svg> 
+                                                
                                                 <span className="text-md flex ml-1 h-auto bg-gray-900 text-gray-200 text-xs font-normal rounded-sm px-1 p-1 items-end">
                                                     {m.message}
                                                     {/* <span
@@ -226,7 +201,7 @@ const UserChatBox = props => {
                             </span>
                         </div> */}
                         {chatInfo !== null &&
-                            chatInfo.user_id !== null &&
+                            chatInfo.agent_id !== null &&
                             chatInfo.active == 0 && (
                                 <div className="block text-center">
                                     <div
@@ -278,4 +253,4 @@ const UserChatBox = props => {
     );
 };
 
-export default UserChatBox;
+export default agentChatBox;

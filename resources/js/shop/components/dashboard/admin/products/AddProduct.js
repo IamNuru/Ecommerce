@@ -1,6 +1,7 @@
 import React, { useContext, useState, useEffect } from "react";
 import ProductsContext from "../../../context/products/Context";
 import CategoryContext from "../../../context/category/Context";
+import BrandContext from "../../../context/brand/Context";
 import { Link } from "react-router-dom";
 
 const AddProduct = () => {
@@ -19,6 +20,10 @@ const AddProduct = () => {
     categories,
     getCategories,
   } = useContext(CategoryContext);
+  const {
+    brands,
+    getBrands,
+  } = useContext(BrandContext);
 
 
   //set data state
@@ -31,6 +36,7 @@ const AddProduct = () => {
   });
 
   const [category, setCategory] = useState("");
+  const [brandID, setBrandID] = useState("");
   const [image_name, setImageName] = useState("");
   const [update, setUpdate] = useState(false);
 
@@ -52,6 +58,7 @@ const AddProduct = () => {
   //component
   useEffect(() => {
     getCategories();
+    getBrands();
     clearMessages();
     setFormLoading(false)
 
@@ -66,6 +73,10 @@ const AddProduct = () => {
   //When category is selected
   const onCategorySelect = (e) => {
     setCategory(e.target.value);
+  };
+  //When category is selected
+  const onBrandSelect = (e) => {
+    setBrandID(e.target.value);
   };
 
   //on File change
@@ -84,6 +95,7 @@ const AddProduct = () => {
         image_name: product.image_name,
       });
       setCategory(product.category_id);
+      setBrandID(product.brand_id && product.brand_id);
       setUpdate(true);
     }
 
@@ -129,6 +141,7 @@ const AddProduct = () => {
       formData.append("deductions", deductions);
       formData.append("image_name", image_name);
       formData.append("category", category);
+      formData.append("brandID", parseInt(brandID));
       formData.append("description", description);
       //if in update mode
       if (update) {
@@ -261,12 +274,33 @@ const AddProduct = () => {
           </select>
         </div>
         <div className="block">
+          <label className="text-md text-gray-800">Select Brand</label>
+          <select
+            value={brandID}
+            className="border border-gray-400 w-full py-1 px-1 outline-none focus:border-purple-300"
+            onChange={onBrandSelect}
+          >
+            <option value="">Select Brand</option>
+            {brands?.length > 0 ? (
+              brands.map((brand, index) => {
+                return (
+                  <option value={brand.id} key={index} index={index}>
+                    {brand.name}
+                  </option>
+                );
+              })
+            ) 
+             : (
+              <option value="None">No Brand</option>
+            )}
+          </select>
+        </div>
+        <div className="block">
           <label className="text-md text-gray-800">Choose Image</label>
           <input
             type="file"
             name="image_name"
             onChange={onFileChange}
-            required
             className={`${errors?.title &&
               "border-red-600 "} border border-gray-400 w-full py-1 px-1 outline-none focus:border-purple-300`}
           />

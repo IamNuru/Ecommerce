@@ -2,6 +2,7 @@ import React, { useContext } from "react";
 import CartContext from "../context/cart/Context";
 import MiniCart from "../cart/MiniCart";
 import Home from "./Main";
+import HomePage from "./HomePage";
 
 const MainPage = props => {
     const { wishList, cart } = useContext(CartContext);

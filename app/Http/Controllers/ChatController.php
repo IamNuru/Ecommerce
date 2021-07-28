@@ -28,7 +28,7 @@ class ChatController extends Controller
     }
 
 
-    // send/store message
+    // send/store message from authenticated user
     public function sendNewMessage(Request $request, $from_id, $to_id)
     {
         $request->validate([
@@ -43,35 +43,13 @@ class ChatController extends Controller
         return ['status' => 'Message Sent!'];
     }
 
-    // store message from user
-    public function sendUserNewMessage(Request $request, $from_id, $to_id)
-    {
-        $request->validate([
-            'message' => 'required',
-        ]);
-        //$user = Auth::user();
-        //$user = Chat::find($from_id);
-
-        //check if user is activated
-
-        $active = Chat::find($from_id);
-        if ($active->active) {
-            $message = new Message;
-            $message->from_id = $from_id;
-            $message->to_id = $to_id;
-            $message->message = $request->message;
-            $message->save();
-            broadcast(new MessageSent($message))->toOthers();
-            return ['status' => 'Message Sent!'];
-        }
-    }
 
 
 
     //get the one making request messages
-    public function getChats($from_id, $to_id)
+    public function getChats($user_id, $to_id)
     {
-        $messages = collect(Message::with('user')->where('from_id', $from_id)->get());
+        $messages = collect(Message::with('user')->where('user_id', $user_id)->get());
         $uniqueMessages = $messages->unique('to_id')->values()->all();
 
         return response()->json($uniqueMessages);
@@ -91,21 +69,20 @@ class ChatController extends Controller
         ]);
 
         //save to database
-        $user = Chat::create([
+        $chat = Chat::create([
             'name' => $request->username,
             'active' => true,
         ]);
 
         $message = new Message;
-        $message->from_id = $user->id;;
-        $message->to_id = 6;
+        $message->from_id = $chat->id;
         $message->message =$request->message;
         $message->save();
 
-        broadcast(new MessageSent($message))->toOthers();
+        //broadcast(new MessageSent($message))->toOthers();
 
         //return the created user
-        return response()->json($user);
+        return response()->json($chat);
     }
 
 
@@ -114,16 +91,16 @@ class ChatController extends Controller
     {
 
         $user = Auth::user();
-        $chat = Chat::find($id);
+
+        $chat = Chat::where('id', $id)->first();
         $chat->user_id = $user->id;
         $chat->active = true;
         $chat->update();
 
-        $message = new Message;
-        $message->from_id = $user->id;;
-        $message->to_id = $id;
+        $message = Message::where('from_id', $id)->first();
+        $message->to_id = $user->id;
         $message->message = "Your are now connected with an agent";
-        $message->save();
+        $message->update();
 
         broadcast(new MessageSent($message))->toOthers();
     }
@@ -146,7 +123,7 @@ class ChatController extends Controller
     }
 
 
-    //find chatting with
+    //find the customer you are chatting with
     public function chattingWith($id)
     {
         $data = Chat::findOrFail($id);
@@ -179,7 +156,7 @@ class ChatController extends Controller
     {
         $user = Auth::user();
         $message = $user->messages()->create([
-            'message' => $request->message
+            //'message' => $request->message
         ]);
 
         broadcast(new MessageSent($message))->toOthers();

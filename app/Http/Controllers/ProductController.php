@@ -53,6 +53,14 @@ class ProductController extends Controller
         return response()->json($data);
     }
 
+    public function homepageCarousel()
+    {
+
+        $data = Product::where('qty', '>' , 0)->limit(5)->get();
+
+        return response()->json($data);
+    }
+
 
 
     //fetch home page category of products
@@ -94,6 +102,7 @@ class ProductController extends Controller
             'qty' => 'nullable|numeric',
             'description' => 'nullable|string|min:2|max:250',
             'image_name' => 'required|image',
+            'brandID' => 'nullable|integer',
         ]);
 
         //check if image is selected
@@ -119,6 +128,7 @@ class ProductController extends Controller
         }
         $product = new Product();
         $product->category_id = $request->category;
+        $product->brand_id = $request->brandID;
         $product->title = $request->title;
         $product->slug =  Str::slug($request->title);
         $product->price = $request->price;
@@ -158,8 +168,9 @@ class ProductController extends Controller
             'qty' => 'nullable|numeric',
             'description' => 'nullable|string|max:250',
             'image_name' => 'nullable|image',
+            'brandID' => 'nullable|integer',
         ]);
-
+        $product = Product::findOrFail($id);
         if ($request->file('image_name')) {
             //get file name with extension
             $filenameWithExt = $request->file('image_name')->getClientOriginalName();
@@ -175,19 +186,18 @@ class ProductController extends Controller
 
             //get file path
             $path = $request->file('image_name')->storeAs('public/images/products', $filenameToStore);
-        } else {
-            $filenameToStore = 'noimage.jpg';
+            $product->image = $filenameToStore;
         }
 
-        $product = Product::findOrFail($id);
+        
         $product->title = $request->title;
         $product->category_id = $request->category;
+        $product->brand_id = $request->brandID;
         $product->slug =  Str::slug($request->title);
         $product->price = $request->price;
         $product->deduction = $request->deductions;
         $product->qty = $request->qty;
         $product->description = $request->description;
-        $product->image = $filenameToStore;
         $product->update();
 
         return response()->json(['message' => 'Product Updated Successfully']);
@@ -229,9 +239,5 @@ class ProductController extends Controller
     }
 
 
-    public function export() 
-    {
-        return Excel::download(new ProductsExport, 'products.xlsx');
-        return back();
-    }
+    
 }

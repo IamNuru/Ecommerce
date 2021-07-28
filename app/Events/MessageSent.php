@@ -16,7 +16,7 @@ class MessageSent implements ShouldBroadcast
 {
     use Dispatchable, InteractsWithSockets, SerializesModels;
 
-    public $user;
+    //public $user;
     public $message;
 
     /**

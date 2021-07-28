@@ -10,6 +10,7 @@ use App\Http\Controllers\OrderController;
 use App\Http\Controllers\TransactionController;
 use App\Http\Controllers\Auth\ForgotPasswordController;
 use App\Http\Controllers\Auth\ResetPasswordController;
+use App\Http\Controllers\BrandController;
 use App\Http\Controllers\ChatController;
 use App\Http\Controllers\DestinationController;
 use App\Http\Controllers\ProductReviewController;
@@ -36,20 +37,29 @@ Route::get('categories', [CategoryController::class, 'index']);
 Route::get('category/{id}', [CategoryController::class, 'show']);
 Route::get('products/category/{catName}', [CategoryController::class, 'categoryProducts']);
 Route::get('products/homepage/{catName}', [ProductController::class, 'homepageProducts']);
+Route::get('homepage/carousel', [ProductController::class, 'homepageCarousel']);
 Route::get('category/products/{id}', [ProductController::class, 'categoryProducts']);
-Route::get('brands', [ProductController::class, 'brands']);
+
 Route::get('search', [ProductController::class, 'search']);
 Route::get('checkorderstatus/{orderNumber}', [TransactionController::class, 'checkOrderStatus']);
 Route::get('cart/items/{cart}', [ProductController::class, 'cartItems']);
 Route::post('password/email', [ForgotPasswordController::class, 'sendResetLinkEmail']);
 Route::post('password/reset', [ResetPasswordController::class, 'reset']);
 Route::post('request-live-chat', [ChatController::class, 'requestLiveChat']);
-Route::get('find/chat/user/{id}', [ChatController::class, 'chattingWith']);
-Route::post('message/from/user/{from_id}/{to_id}', [ChatController::class, 'sendUserNewMessage']);
 Route::get('destinations', [DestinationController::class, 'destinations']);
 Route::get('destination/{id}', [DestinationController::class, 'show']);
-Route::get('messages/{from_id}/{to_id}', [ChatController::class, 'getAuthUserChatWith']);
 
+
+//brands
+Route::get('brands', [BrandController::class, 'brands']);
+Route::get('brand/{id}', [BrandController::class, 'show']);
+
+
+
+///chats
+Route::post('message/{from_id}/{to_id}', [ChatController::class, 'sendNewMessage']);
+Route::get('messages/{from_id}/{to_id}', [ChatController::class, 'getAuthUserChatWith']);
+Route::get('find/chat/user/{id}', [ChatController::class, 'chattingWith']);
 
 
 
@@ -57,13 +67,11 @@ Route::get('messages/{from_id}/{to_id}', [ChatController::class, 'getAuthUserCha
 
 // Private routes
 Route::middleware('auth:sanctum')->group(function () {
-    //Route::get('/', 'ChatsController@index');
-    Route::post('acceptchat/{id}', [ChatController::class, 'acceptChat']);
 
-    Route::get('messages', [ChatController::class, 'fetchMessages']);
-    Route::post('message/{from_id}/{to_id}', [ChatController::class, 'sendNewMessage']);
+    Route::post('acceptchat/{id}', [ChatController::class, 'acceptChat']);
+    //Route::get('/', 'ChatsController@index');
     Route::get('fetch/all/requestedchats', [ChatController::class, 'fetchAllRequestedChats']);
-    Route::get('close/chat/{chat_id}', [ChatController::class, 'closeChat']);
+    Route::get('close/chat/{id}', [ChatController::class, 'closeChat']);
 
 
     Route::post('resetpassword', [UserController::class, 'resetpassword']);
@@ -119,6 +127,11 @@ Route::middleware('auth:sanctum')->group(function () {
 
     //handle payments
     Route::post('verify/transaction/{reference}', [TransactionController::class, 'verify']);
+
+    //brands
+    Route::post('brand', [BrandController::class, 'store']);
+    Route::post('brand/{id}', [BrandController::class, 'update']);
+    Route::delete('brand/{id}', [BrandController::class, 'remove']);
 });
 
 

@@ -161,6 +161,17 @@ function Sidebar({
                 </div>
               </NavLink>
             </li>
+            {/* brands */}
+            <li className={`px-3 py-2 rounded-sm mb-0.5 last:mb-0 ${page === 'brands' && 'bg-gray-900'}`}>
+              <NavLink exact to="/admin/area/brands" className={`block text-gray-200 hover:text-white transition duration-150 ${page === '' && 'hover:text-gray-200'}`}>
+                <div className="flex flex-grow">
+                  <svg className="flex-shrink-0 h-6 w-6 mr-3" viewBox="0 0 24 24">
+                    <path className={`fill-current text-gray-400 ${page === 'brands' && 'text-indigo-500'}`} d="M11.499 12.03v11.971l-10.5-5.603v-11.835l10.5 5.467zm11.501 6.368l-10.501 5.602v-11.968l10.501-5.404v11.77zm-16.889-15.186l10.609 5.524-4.719 2.428-10.473-5.453 4.583-2.499zm16.362 2.563l-4.664 2.4-10.641-5.54 4.831-2.635 10.474 5.775z" />
+                    </svg>
+                  <span className="text-sm font-medium">Brands</span>
+                </div>
+              </NavLink>
+            </li>
             {/* customers */}
             <li className={`hidden px-3 py-2 rounded-sm mb-0.5 last:mb-0 ${page === 'customers' && 'bg-gray-900'}`}>
               <NavLink exact to="/admin/area/customers" className={`block text-gray-200 hover:text-white transition duration-150 ${page === '' && 'hover:text-gray-200'}`}>

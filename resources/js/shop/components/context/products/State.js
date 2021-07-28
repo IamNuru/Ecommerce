@@ -23,7 +23,6 @@ import {
     FILTER_PRODUCTS,
     SORT_PRICE,
     GET_ALL_PRODUCTS,
-    GET_BRANDS,
     FILTER_BY_SEARCH
 } from "../types";
 
@@ -45,7 +44,6 @@ const ProductsState = props => {
     const initialState = {
         products: null,
         allproducts: null,
-        brands: null,
         product: null,
         relatedProducts: null,
         searchedItems: null,
@@ -193,19 +191,6 @@ const ProductsState = props => {
         } catch (error) {}
     };
 
-    // get all products
-    const getBrands = async () => {
-        try {
-            const res = await axios.get(
-                `${process.env.MIX_APP_API_URL}/brands`,
-                config
-            );
-            dispatch({
-                type: GET_BRANDS,
-                payload: res.data
-            });
-        } catch (error) {}
-    };
 
     //**get specific products products */
 
@@ -347,7 +332,6 @@ const ProductsState = props => {
             value={{
                 products: state.products,
                 allproducts: state.allproducts,
-                brands: state.brands,
                 catProducts: state.catProducts,
                 relatedProducts: state.relatedProducts,
                 product: state.product,
@@ -361,7 +345,6 @@ const ProductsState = props => {
                 deleteProduct,
                 getProducts,
                 getAllProducts,
-                getBrands,
                 getProduct,
                 searchProducts,
                 getRelatedProducts,

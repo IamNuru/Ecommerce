@@ -90,6 +90,7 @@ class UserController extends Controller
             'password' => 'required|confirmed',
             'gender' => 'required|string',
         ]);
+        
 
         $user = new User();
         $user->first_name = $request->firstName;
@@ -169,7 +170,28 @@ class UserController extends Controller
             'lastName' => 'required|string|min:3|max:50',
             'destination' => 'nullable|integer',
             'phone' => 'nullable|integer',
+            'image_name' => 'nullable|image',
         ]);
+        if ($request->file('image_name')) {
+            // if ($request->hasFile('image_name')) {
+
+            //Get file name with Extension
+            $filenameWithExt = $request->file('image_name')->getClientOriginalName();
+
+            //Get just the file name
+            $filename = pathinfo($filenameWithExt, PATHINFO_FILENAME);
+
+            //Get just the Extension
+            $extension = $request->file('image_name')->getClientOriginalExtension();
+
+            //File name to store
+            $filenameToStore = $filename . '_' . time() . '.' . $extension;
+
+            //get file path
+            $path = $request->file('image_name')->storeAs('public/images/users', $filenameToStore);
+        }else{
+            $filenameToStore = null;
+        };
 
         $user = Auth()->user();
         $user->first_name = $request->firstName;
@@ -177,6 +199,7 @@ class UserController extends Controller
         $user->destination_id = $request->destination;
         $user->gender = $request->gender;
         $user->phone = $request->phone;
+        $user->image = $filenameToStore;
         $user->update();
 
         return response()->json('Records updated');

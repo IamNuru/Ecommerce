@@ -45,17 +45,11 @@ const Order = props => {
                                         {i.products.length > 0 &&
                                             i.products.map((p, index) => {
                                                 return (
-                                                    <div
-                                                        key={index}
-                                                        className="shadow-md pb-4"
-                                                    >
+                                                    <div key={index} className="shadow-md pb-4">
                                                         <div className="p-2 block bg-blue-300">
                                                             <div className="flex justify-left">
-                                                                <img
-                                                                    src={`${process.env.MIX_APP_URL}/storage/images/products/${p.image}`}
-                                                                    alt={
-                                                                        p.price
-                                                                    }
+                                                                <img src={`${process.env.MIX_APP_URL}/storage/images/products/${p.image}`}
+                                                                    alt={ p.price }
                                                                     className="flex-shrink-0 w-14 h-14 mr-2"
                                                                 />
                                                                 <div className="mt-6 pl-2 font-semibold">
@@ -91,8 +85,8 @@ const Order = props => {
                                                             <div className="p-1">
                                                                 {p.description}
                                                             </div>
-                                                            {item.status ==
-                                                                "placed" && (
+                                                            {item.status ===
+                                                                "completed" && (
                                                                 <div className="p-1 w-full text-right">
                                                                     <Link
                                                                         to={`/account/product/${p.id}/review`}

@@ -15,7 +15,6 @@ import {
     FILTER_PRODUCTS,
     SORT_PRICE,
     GET_ALL_PRODUCTS,
-    GET_BRANDS,
     FILTER_BY_SEARCH,
 } from "../types";
 
@@ -44,12 +43,6 @@ const ProductsReducer = (state, action) => {
                 loading: false
             };
 
-        case GET_BRANDS:
-            return {
-                ...state,
-                brands: action.payload,
-                loading: false
-            };
             
         case SEARCH_PRODUCTS:
             return {
@@ -114,7 +107,7 @@ const ProductsReducer = (state, action) => {
                 ...state,
                 allproducts: state.products.filter(item => {
                   if (action.payload.length > 0) {
-                    return action.payload.includes(item.brand)
+                    return action.payload.includes(item.brand_id)
                   }else{
                     return state.products
                   }

@@ -27,8 +27,8 @@ const Profile = () => {
                                    user && user.image 
                                    ? (
                                     <img className="h-auto w-full mx-auto"
-                                    src="https://lavinephotography.com.au/wp-content/uploads/2017/01/PROFILE-Photography-112.jpg"
-                                    alt="" />
+                                    src={`${process.env.MIX_APP_URL}/storage/images/users/${user.image}`}
+                                    alt="User Profile Image" />
                                    ) : (
                                        user && user.gender === "f" 
                                        ? (

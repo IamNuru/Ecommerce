@@ -11,8 +11,6 @@ import CategoryProducts from "./products/categories/CategoryProducts";
 import Cart from "./cart/Cart";
 import Checkout from "./cart/inc/Checkout";
 import SearchedItem from "./SearchPage";
-import LoginPage from "./auth/LoginPage";
-import Register from "./auth/Register";
 import SingleProduct from "./products/SingleProduct";
 import SuccessOrder from "./cart/inc/SuccessOrder";
 import Sidebar from "./inc/Sidebar";
@@ -25,7 +23,8 @@ import UnAuthorisedPage from "./inc/UnAuthorisedPage";
 import AllProductsPage from "./products/all/AllProductsPage";
 import WishList from "./dashboard/profile/tstore/WishList";
 import Login from "./auth/Login";
-import RegisterPage from "./auth/RegisterPage";
+import Register from "./auth/Register";
+import About from "./About";
 
 const Main = (props) => {
   const location = useLocation();
@@ -58,12 +57,11 @@ const Main = (props) => {
             path="/cart/checkout/success/:ref/:channel/:amount"
             component={SuccessOrder}
           />
+          <Route exact path="/about" component={About} />
           <Route exact path="/search" component={SearchedItem} />
           <Route exact path="/category/:cat" component={CategoryProducts} />
           <Route exact path="/product/:id" component={SingleProduct} />
-          <Route exact path="/login" component={LoginPage} />
-          <Route exact path="/lo" component={Login} />
-          <Route exact path="/re" component={RegisterPage} />
+          <Route exact path="/login" component={Login} />
           <Route exact path="/register" component={Register} />
           <Route exact path="/forgotPassword" component={ForgotPassword} />
           <Route exact path="/password/reset/:token" component={ResetPassword} />

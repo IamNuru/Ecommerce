@@ -15,11 +15,11 @@ const ChatBox = props => {
     const configs = {
         headers: {
             "Content-Type": "application/json",
-            Authorization: `Bearer ${localStorage.getItem("token")}`
+            //Authorization: `Bearer ${localStorage.getItem("token")}`
         }
     };
 
-    const [from_id] = useState(props.match.params.from_id);
+    const [to_id] = useState(props.match.params.id);
     //const [to_id] = useState(props.match.params.to_id);
     const [message, setMessage] = useState("");
     const [messages, setMessages] = useState([]);
@@ -35,7 +35,7 @@ const ChatBox = props => {
     const accept = () => {
         axios
             .post(
-                `${process.env.MIX_APP_API_URL}/acceptchat/${from_id}`,
+                `${process.env.MIX_APP_API_URL}/acceptchat/${props && props.match.params.id}`,
                 "",
                 config
             )
@@ -50,7 +50,7 @@ const ChatBox = props => {
     useEffect(() => {
         axios
             .get(
-                `${process.env.MIX_APP_API_URL}/find/chat/user/${from_id}`,
+                `${process.env.MIX_APP_API_URL}/find/chat/user/${to_id}`,
                 config
             )
             .then(res => {
@@ -64,17 +64,19 @@ const ChatBox = props => {
     useEffect(() => {
         const fetchMessages = async () => {
             await axios
-                .get(`${process.env.MIX_APP_API_URL}/messages/${from_id}/${user && user.id}`,
+                .get(`${process.env.MIX_APP_API_URL}/messages/${user && user.id}/${to_id}`,
                     config
                 )
                 .then(res => {
                     setMessages(res.data);
+                    setSent(false);
                 })
                 .catch(err => {});
         };
         fetchMessages();
         Echo.channel("shop").listen("MessageSent", e => {
-            messages.push({ message: e.message });
+            messages.push({ message: e.message.message });
+            setSent(true)
             /* setSent(e.message); */
         });
     }, [sent, user]);
@@ -86,16 +88,11 @@ const ChatBox = props => {
         setSent(true);
         const data = { message: message };
         axios
-            .post(
-                `${process.env.MIX_APP_API_URL}/message/${user.id}/${from_id}`,
-                data,
-                config
-            )
+            .post(`${process.env.MIX_APP_API_URL}/message/${user.id}/${to_id}`, data, config)
             .then(res => {
                 setSent(false);
                 setMessage("");
-            })
-            .catch(err => {
+            }).catch(err => {
                 setSent(false);
             });
     };
@@ -105,7 +102,7 @@ const ChatBox = props => {
         const data = { message: mes };
         axios
             .post(
-                `${process.env.MIX_APP_API_URL}/message/${user.id}/${from_id}`,
+                `${process.env.MIX_APP_API_URL}/message/${user.id}/${to_id}`,
                 data,
                 config
             )
@@ -126,15 +123,17 @@ const ChatBox = props => {
     const closeChat = async mes => {
         await sendButtonMessage(mes);
         await axios
-            .get(`${process.env.MIX_APP_API_URL}/close/chat/${from_id}`, config)
+            .get(`${process.env.MIX_APP_API_URL}/close/chat/${to_id}`, config)
             .then(res => {
                 setSent(false);
-            })
-            .catch(err => {
+            }).catch(err => {
                 setSent(false);
             });
         Echo.channel("shop").listen("MessageSent", e => {});
     };
+
+
+    
     return (
         <div className="mt-1 h-full pt-2 px-4 pb-28">
             <div className="flex justify-center items-center h-full ">
@@ -171,7 +170,7 @@ const ChatBox = props => {
                               messages.map((m, i) => {
                                   return (
                                       <div key={i}>
-                                          {from_id && from_id == m.from_id ? (
+                                          {to_id && to_id == m.from_id ? (
                                               <div className="flex items-center pt-2 pr-10">
                                                   <img
                                                       src="https://i.imgur.com/IAgGUYF.jpg"
@@ -258,7 +257,7 @@ const ChatBox = props => {
                             <button
                                 onClick={() =>
                                     buttonMessage(
-                                        `Hi ${fromName}, Sorry for keeping you waiting. My name is ${user.name}, How can I help you`
+                                        `Hi ${fromName}, Sorry for keeping you waiting. My name is ${user.first_name ? user.first_name: user.last_name}, How can I help you`
                                     )
                                 }
                                 className="m-1 bg-purple-600 text-white px-6 text-md text-center py-1"

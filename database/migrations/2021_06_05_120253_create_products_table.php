@@ -36,7 +36,7 @@ class CreateProductsTable extends Migration
             $table->string('rom_size')->nullable();
             $table->string('ram_size')->nullable();
             $table->string('battery_volt')->nullable();
-            $table->string('brand')->nullable();
+            $table->foreignId('brand_id')->nullable();
             $table->timestamps();
         });
     }
