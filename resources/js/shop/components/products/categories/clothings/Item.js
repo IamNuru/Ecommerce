@@ -44,7 +44,7 @@ const Item = (props) => {
             alt={product.title}
           style={{minHeight:"150px"}}/>
         </Link>
-        {product.deduction && (
+        {product.deduction && parseInt(product.deduction) > 0.01 &&(
           <div className="leading-normal -mt-48 z-10  mt-2 ml-2 absolute">
             <div
               className="line-through oldstyle-nums font-serif

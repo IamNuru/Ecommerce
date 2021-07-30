@@ -13,12 +13,10 @@ import Profile from "./profile-page/Profile";
 const ProfileMain = () => {
   const history = useHistory();
   return (
-    <div className="block">
+    <div className="block h-full">
       <div className="md:hidden mt-28">
-      <>
-        <Header />
-      </>
-        <Sidebar />
+        <><Header /></>
+        <><Sidebar /></>
       </div>
       <div className="flex justify-between w-full shadow-md mb-2">
         <div>
@@ -34,7 +32,7 @@ const ProfileMain = () => {
         </div>
         
       </div>
-      <div className="block w-full">
+      <div className="w-full">
         <Switch>
           <Route exact path="/account/profile" component={Profile} />
           <Route

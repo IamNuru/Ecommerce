@@ -19,6 +19,7 @@ const Orders = () => {
                     
             }
             <p className="text-center mt-8">continue <Link to="/" className="text-green-600">Shopping</Link></p>
+        
         </div>
     )
 }

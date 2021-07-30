@@ -106,9 +106,7 @@ function DashboardCard10() {
                                                         <div className="w-10 h-10 flex-shrink-0 mr-2 sm:mr-3">
                                                             <img
                                                                 className="rounded-full"
-                                                                src={
-                                                                    customer.image
-                                                                }
+                                                                src={`${process.env.MIX_APP_URL}/storage/images/users/${customer.image}`}
                                                                 width="40"
                                                                 height="40"
                                                                 alt={

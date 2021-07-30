@@ -106,6 +106,7 @@ const ResetPassword = (props) => {
           Update
         </button>
       </form>
+      
     </div>
   );
 };

@@ -13,7 +13,7 @@ const Clothings = () => {
   useEffect(() => {
     const getHomePageCategoryProducts = async () => {
       await axios
-        .get(`${process.env.MIX_APP_API_URL}/products/homepage/shoes?limit=6`)
+        .get(`${process.env.MIX_APP_API_URL}/products/homepage/clothings?limit=6`)
         .then((res) => {
           setClothings(res.data.products);
           setLoading(false)

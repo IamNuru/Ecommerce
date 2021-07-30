@@ -29,12 +29,15 @@ function App() {
                                             <SettingsState>
                                                 <div className="App block bg-white">
                                                     <Router>
-                                                        <div className="block min-h-screen">
+                                                         <div className="block min-h-screen">
                                                             <Home />
-                                                        </div>
-                                                        <Footer />
+
+                                                            
+                                                        </div>  
                                                         <HelpLink />
+                                                        <Footer /> 
                                                     </Router>
+                                                    
                                                 </div>
                                             </SettingsState>
                                         </ReviewState>

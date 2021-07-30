@@ -89,12 +89,12 @@ useEffect(() => {
     publicKey: `${process.env.MIX_APP_PAYSTACK_PUBLIC_KEY}`,
   };
 
-  // you can call this function anything
-  const onSuccess = (reference) => {
+  // you can call this function anything there is a succesful transaction
+  const onSuccess = async (reference) => {
     var cart_data = { cart: cart };
-    axios.post(`${process.env.MIX_APP_API_URL}/verify/transaction/${reference.reference}`, cart_data, configs)
-        .then(res =>{
-            history.push(`/cart/checkout/success/${reference.reference}/${res.data.channel}/${res.data.amount}`);
+    await axios.post(`${process.env.MIX_APP_API_URL}/verify/transaction/${reference.reference}`, cart_data, configs)
+        .then(async res =>{
+           await history.push(`/cart/checkout/success/${reference.reference}/${res.data.channel}/${res.data.amount}`);
         }).catch(err =>{
             console.log(err.response)
         })

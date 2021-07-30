@@ -51,8 +51,8 @@ const Cart = () => {
                             <thead>
                                 <tr className="h-12 uppercase">
                                     <th className="hidden md:table-cell"></th>
-                                    <th className="text-left">Product</th>
-                                    <th className="lg:text-right text-left pl-5 lg:pl-0">
+                                    <th className="font-medium text-xs text-yellow-800 text-left">Product</th>
+                                    <th className="font-medium text-xs text-yellow-800 lg:text-right text-left pl-5 lg:pl-0">
                                         <span
                                             className="lg:hidden"
                                             title="Quantity"
@@ -63,10 +63,10 @@ const Cart = () => {
                                             Quantity
                                         </span>
                                     </th>
-                                    <th className="hidden text-right md:table-cell">
+                                    <th className="font-medium text-xs text-yellow-800 hidden text-right md:table-cell">
                                         Unit price
                                     </th>
-                                    <th className="text-right">Total price</th>
+                                    <th className="font-medium text-xs text-yellow-800 text-right">Total price</th>
                                 </tr>
                             </thead>
                             <tbody>

@@ -15,9 +15,10 @@ import Dashboard from "./adminDashboard/pages/Dashboard";
 
 const Home = (props) => {
   return (
-    <div className="h-full">
+    <div className="h-full min-h-full">
       <Switch>
-
+        <AdminRoute exact path="/admin/area" component={Dashboard} />
+        <AdminRoute exact path="/admin/area/*" component={Dashboard} />
         <ProtectedRoute exact path="/account" component={Profile} />
         <ProtectedRoute exact path="/account/*" component={ProfileMain}/>
         <Route exact path="/help" component={Help}/>

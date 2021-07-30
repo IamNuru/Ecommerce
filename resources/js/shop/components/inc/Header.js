@@ -76,7 +76,8 @@ const Header = () => {
               <svg className="fill-current text-gray-800 mr-2" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24">
                   <path d="M5,22h14c1.103,0,2-0.897,2-2V9c0-0.553-0.447-1-1-1h-3V7c0-2.757-2.243-5-5-5S7,4.243,7,7v1H4C3.447,8,3,8.447,3,9v11 C3,21.103,3.897,22,5,22z M9,7c0-1.654,1.346-3,3-3s3,1.346,3,3v1H9V7z M5,10h2v2h2v-2h6v2h2v-2h2l0.002,10H5V10z" />
               </svg>
-              NURU
+              <span className="hidden md-block">NURU</span>
+              
           </Link>
       </div>
 
@@ -86,16 +87,11 @@ const Header = () => {
           <div className="flex">
             
             <Link
-              to="/register"
+              to="/login"
               className="mx-1"
-              title="register"
+              title="Account"
             >
-              <i className="md:hidden fa fa-user-plus"></i>
-              <i className="hidden md:block">Register</i>
-            </Link>
-            <Link to="/login" className=" flex" title="sign in">
-              <i className="md:hidden fa fa-sign-in"></i>
-              <i className="hidden md:block">Login</i>
+              <svg className="fill-current hover:text-black w-4 h-6" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><path d="M12 2c2.757 0 5 2.243 5 5.001 0 2.756-2.243 5-5 5s-5-2.244-5-5c0-2.758 2.243-5.001 5-5.001zm0-2c-3.866 0-7 3.134-7 7.001 0 3.865 3.134 7 7 7s7-3.135 7-7c0-3.867-3.134-7.001-7-7.001zm6.369 13.353c-.497.498-1.057.931-1.658 1.302 2.872 1.874 4.378 5.083 4.972 7.346h-19.387c.572-2.29 2.058-5.503 4.973-7.358-.603-.374-1.162-.811-1.658-1.312-4.258 3.072-5.611 8.506-5.611 10.669h24c0-2.142-1.44-7.557-5.631-10.647z"/></svg>
             </Link>
           </div>
         ) : (

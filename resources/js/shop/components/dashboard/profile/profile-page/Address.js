@@ -84,7 +84,7 @@ const Address = () => {
             {
                 formloading && <FormLoadingCover />
             }
-        <div className="bg-white p-3 shadow-sm rounded-sm">
+        <div className="bg-white overflow-auto p-3 shadow-sm rounded-sm">
             <div className="flex items-center space-x-2 font-semibold text-gray-900 leading-8">
                 <span clas="text-green-500">
                     <svg
@@ -105,10 +105,10 @@ const Address = () => {
                 <span className="tracking-wide">Address</span>
             </div>
             <div className="text-gray-700">
-                <div className="grid md:grid-cols-2 text-sm">
+                <div className="grid gap-4 md:grid-cols-2 text-sm">
                     <div className="grid" style={{gridTemplateColumns: "auto 1fr"}} >
                         <div className="whitespace-nowrap px-1 py-3 font-semibold">
-                            First Name
+                            Country
                         </div>
                         <div className="flex py-2">
                             <input
@@ -119,14 +119,14 @@ const Address = () => {
                                 disabled={true}
                                 autoComplete="none"
                                 className={`${errors?.country &&
-                                    "border-red-600 "} py-1 border border-gray-100 px-1 outline-nonene focus:border-purple-300`}
+                                    "border-red-600 "} py-1 border border-gray-100 w-full px-1 outline-nonene focus:border-purple-300`}
                             />
                             <i title="edit" onClick={setInputOfDisable} 
                                 className="fa fa-edit text-blue-400 -mt-1 ml-1 cursor-pointer"></i>
                         </div>
                     </div>
                     <div className="grid" style={{gridTemplateColumns: "auto 1fr"}}>
-                        <div className="whitespace-nowrap px-1 py-3 font-semibold">Last Name</div>
+                        <div className="whitespace-nowrap px-1 py-3 font-semibold">State/Region</div>
                         <div className="flex py-2">
                             <input
                                 type="text"
@@ -136,7 +136,7 @@ const Address = () => {
                                 disabled={true}
                                 autoComplete="none"
                                 className={`${errors?.state &&
-                                    "border-red-600 "} border border-gray-100 py-1 px-1 outline-none focus:border-purple-300`}
+                                    "border-red-600 "} border border-gray-100 w-full py-1 px-1 outline-none focus:border-purple-300`}
                             />
                             <i title="edit" onClick={setInputOfDisable} 
                                 className="fa fa-edit text-blue-400 -mt-1 ml-1 cursor-pointer"></i>
@@ -147,7 +147,7 @@ const Address = () => {
                     
                     <div className="grid" style={{gridTemplateColumns: "auto 1fr"}}>
                         <div className="whitespace-nowrap px-1 py-3 font-semibold">
-                            Contact No.
+                            City.
                         </div>
                         <div className="flex py-2">
                             <input
@@ -158,7 +158,7 @@ const Address = () => {
                                 disabled={true}
                                 autoComplete="none"
                                 className={`${errors?.city &&
-                                    "border-red-600 "} border border-gray-100 py-1 px-1 outline-none focus:border-purple-300`}
+                                    "border-red-600 "} border border-gray-100 w-full py-1 px-1 outline-none focus:border-purple-300`}
                             />
                             <i title="edit" onClick={setInputOfDisable} 
                                 className="fa fa-edit text-blue-400 -mt-1 ml-1 cursor-pointer"></i>
@@ -166,7 +166,7 @@ const Address = () => {
                     </div>
                     <div className="grid" style={{gridTemplateColumns: "auto 1fr"}}>
                         <div className="whitespace-nowrap px-1 py-3 font-semibold">
-                            Contact No.
+                            Box.
                         </div>
                         <div className="flex py-2">
                             <input
@@ -177,7 +177,7 @@ const Address = () => {
                                 disabled={true}
                                 autoComplete="none"
                                 className={`${errors?.box &&
-                                    "border-red-600 "} border border-gray-100 py-1 px-1 outline-none focus:border-purple-300`}
+                                    "border-red-600 "} border border-gray-100 w-full py-1 px-1 outline-none focus:border-purple-300`}
                             />
                             <i title="edit" onClick={setInputOfDisable} 
                                 className="fa fa-edit text-blue-400 -mt-1 ml-1 cursor-pointer"></i>
@@ -185,11 +185,7 @@ const Address = () => {
                     </div>
                 </div>
             </div>
-            {errors !== null &&(
-                <div className="w-full text-red-600 my-1 text-xs text-center">
-                    Your changes contain errors, Please check changes again
-                </div>
-            )}
+            
             {formError !== null &&(
                 <div className="w-full text-red-600 my-1 text-xs text-center">
                     {formError}

@@ -23,7 +23,7 @@ class CreateProductsTable extends Migration
             $table->decimal('price',10,2);
             $table->decimal('shipping_charge',10,2)->default(0.00);
             $table->integer('days_of_delivery')->default(1);
-            $table->decimal('deduction',10,2)->nullable();
+            $table->decimal('deduction',10,2)->default(0.00);
             $table->string('qty');
             $table->string('size')->nullable();
             $table->integer('loved')->nullable();

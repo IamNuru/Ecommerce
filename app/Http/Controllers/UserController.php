@@ -29,9 +29,9 @@ class UserController extends Controller
     public function resetpassword(Request $request)
     {
         $request->validate([
-            'password' => 'required|min:2',
-            'newpassword' => 'required|min:2|confirmed',
-            'newpassword_confirmation' => 'required|min:2'
+            'password' => 'required|min:6|current_password:api',
+            'newpassword' => 'required|min:6|confirmed',
+            'newpassword_confirmation' => 'required|min:6'
         ]);
         $currentPassword = auth()->user()->password;
 
@@ -58,6 +58,7 @@ class UserController extends Controller
     {
         $request->validate([
             'email' => 'required|min:2|email',
+
         ]);
 
         $found = User::where('email', $request->email)->first();
@@ -87,7 +88,7 @@ class UserController extends Controller
             'email' => 'required|string|email|max:255|unique:users,email',
             'firstName' => 'required|string|min:3|max:255',
             'lastName' => 'required|string|min:3|max:255',
-            'password' => 'required|confirmed',
+            'password' => 'required|string|min:6|confirmed',
             'gender' => 'required|string',
         ]);
         
@@ -172,6 +173,8 @@ class UserController extends Controller
             'phone' => 'nullable|integer',
             'image_name' => 'nullable|image',
         ]);
+
+        $user = Auth()->user();
         if ($request->file('image_name')) {
             // if ($request->hasFile('image_name')) {
 
@@ -189,17 +192,13 @@ class UserController extends Controller
 
             //get file path
             $path = $request->file('image_name')->storeAs('public/images/users', $filenameToStore);
-        }else{
-            $filenameToStore = null;
+            $user->image = $filenameToStore;
         };
-
-        $user = Auth()->user();
         $user->first_name = $request->firstName;
         $user->last_name = $request->lastName;
         $user->destination_id = $request->destination;
         $user->gender = $request->gender;
         $user->phone = $request->phone;
-        $user->image = $filenameToStore;
         $user->update();
 
         return response()->json('Records updated');
@@ -215,13 +214,16 @@ class UserController extends Controller
             'state' => 'required|string|max:255',
             'box' => 'required|string|max:255',
         ]);
-
         $user = Auth()->user();
-        $user->address->country = $request->country;
-        $user->address->state = $request->state;
-        $user->address->city = $request->city;
-        $user->address->box = $request->box;
-        $user->address->update();
+        $address = Address::updateOrCreate(
+            ['user_id' => $user->id],
+            [
+                'country' => $request->country,
+                'state' => $request->state,
+                'city' => $request->city,
+                'box' => $request->box,
+            ]
+        );
 
         return response()->json('Address Updated Successfully');
     }

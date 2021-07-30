@@ -91,12 +91,38 @@ const AuthState = (props) => {
 
 
 
+  //refresh user object
+  const refreshUser = async () =>{
+    await axios
+        .get(`${process.env.MIX_APP_API_URL}/user`, config)
+        .then((res) => {
+          if (res.data) {
+            dispatch({
+            type: GET_USER,
+            payload: res.data,
+          });
+          }else{
+            //console.log("user not refreshed")
+          }
+        })
+        .catch(err =>{
+          //console.log("something went wrong")
+        })
+  }
+
+
+
+
+
+
+
   /** *** ACTIONS *** */
   //Register new user
   const register = async (user) => {
     await axios
       .post(`${process.env.MIX_APP_API_URL}/register`, user, config)
       .then((res) => {
+        refreshUser()
         dispatch({
           type: REGISTER,
           payload: res.data,
@@ -118,6 +144,7 @@ const AuthState = (props) => {
     await axios
       .post(`${process.env.MIX_APP_API_URL}/login`, user, config)
       .then((res) => {
+        refreshUser()
         dispatch({
           type: LOGIN,
           payload: res.data[0],
@@ -214,14 +241,12 @@ const AuthState = (props) => {
     await axios
       .post(`${process.env.MIX_APP_API_URL}/password/email`, credentials, config)
       .then((res) => {
-        console.log(res.data);
         dispatch({
           type: SUCCESS_MESSAGES,
           payload: res.data.message,
         });
       })
       .catch((err) => {
-        console.log(err.response);
         var obj = err.response.data.errors ? err.response.data.errors : "";
         dispatch({
           type: ERRORS,
@@ -282,6 +307,7 @@ const AuthState = (props) => {
         setFormLoading,
         setLoading,
         setLogedIn,
+        refreshUser,
       }}
     >
       {props.children}

@@ -110,7 +110,7 @@ const SingleProduct = props => {
                                 <div className="block md:flex justify-between border-t border-b border-gray-200 py-2 px-1">
                                     <span className="mr-4">
                                         Price:{" "}
-                                        {product.deduction ? (
+                                        {product.deduction && parseInt(product.deduction) > 0.01 ? (
                                             <>
                                                 <span className="line-through text-red-500">
                                                     {formatter.format(
@@ -161,7 +161,7 @@ const SingleProduct = props => {
                         </div>
                     )
                 ) : (
-                    <div className="block h-48 md:h-96 w-full m-auto mt-8 mb-8 text-center">
+                    <div className="block h-48 md:h-96 w-full mx-auto mt-8 mb-8 text-center">
                         <LoadingGif />
                     </div>
                 )}

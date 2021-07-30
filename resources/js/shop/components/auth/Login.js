@@ -1,12 +1,15 @@
 import React, { useEffect, useContext, useState } from "react";
 import { Link } from "react-router-dom";
 import AuthContext from "../context/auth/Context";
+import UserContext from "../context/user/Context";
 import loginImg from "../../images/login.jpg";
 import { validateEmail } from "./ValidationComponent";
+import SwitchLoginRegisterPages from "./SwitchLoginRegisterPages";
 
 const LoginPage = (props) => {
   const authContext = useContext(AuthContext);
   const { login, errors, logedin, setError, clearMessages } = authContext;
+  const { refreshUser } = useContext(UserContext);
 
   
   // set state
@@ -20,7 +23,9 @@ const LoginPage = (props) => {
     setError('');
     if(logedin === true){
       props.history.push('/')
+      refreshUser()
     }
+    
     return () => {
       clearMessages();
     };
@@ -68,6 +73,7 @@ const LoginPage = (props) => {
         >
             <div className="absolute bg-black opacity-60 inset-0 z-0"></div>
             <div className="max-w-md w-full space-y-8 p-10 bg-white rounded-xl z-10">
+                <SwitchLoginRegisterPages />
                 <div className="text-center">
                     <h2 className="mt-6 text-3xl font-bold text-gray-900">
                         Welcom Back!
@@ -172,15 +178,6 @@ const LoginPage = (props) => {
                             Sign in
                         </button>
                     </div>
-                    <p className="flex flex-col items-center justify-center mt-10 text-center text-md text-gray-500">
-                        <span>Don't have an account?</span>
-                        <Link
-                            to="/register"
-                            className="text-indigo-500 hover:text-indigo-500no-underline hover:underline cursor-pointer transition ease-in duration-300"
-                        >
-                            Sign up
-                        </Link>
-                    </p>
                 </form>
             </div>
         </div>

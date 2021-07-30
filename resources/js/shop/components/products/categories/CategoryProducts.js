@@ -30,8 +30,7 @@ const CategoryProducts = (props) => {
       {errors === null || errors === "" ? (
         <div>
           <h2
-            className={`${window.location.href === "http://localhost:8000/" &&
-              "hidden"} text-center shadow-md mb-2 py-4 font-semibold text-xl font-serif w-full capitalize`}
+            className={`text-center shadow-md mb-2 py-4 font-semibold text-xl font-serif w-full capitalize`}
           >
             {props.match.params.cat}
           </h2>

@@ -8,6 +8,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Str;
 use App\Exports\ProductsExport;
+use Illuminate\Support\Facades\Auth;
 use Maatwebsite\Excel\Facades\Excel;
 
 class ProductController extends Controller
@@ -127,6 +128,7 @@ class ProductController extends Controller
             $filenameToStore = 'noimage.jpg';
         }
         $product = new Product();
+        $product->user_id = Auth()->user()->id;
         $product->category_id = $request->category;
         $product->brand_id = $request->brandID;
         $product->title = $request->title;
@@ -191,6 +193,7 @@ class ProductController extends Controller
 
         
         $product->title = $request->title;
+        $product->user_id = Auth()->user()->id;
         $product->category_id = $request->category;
         $product->brand_id = $request->brandID;
         $product->slug =  Str::slug($request->title);

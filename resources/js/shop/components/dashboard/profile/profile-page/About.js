@@ -28,7 +28,7 @@ const About = () => {
         destination: "",
         gender: "m",
     });
-    const [userImageName, setUserImageName] = useState(null)
+    const [userImageName, setUserImageName] = useState("")
     const [editMode, setEditMode] = useState(false);
     const [err, setErr] = useState()
 
@@ -44,11 +44,12 @@ const About = () => {
                 destination: user.destination_id !== null ? user.destination_id : "",
                 gender: user.gender !== null ? user.gender : "",
             });
-            setUserImageName(null)
+            setUserImageName(user.image !== null ? user.image : "",)
         }
     }, [user]);
 
     const { firstName, lastName, email, phone, destination, gender } = data;
+
 
     //set Edit mode to false after getting a success message
     useEffect(() => {
@@ -57,11 +58,18 @@ const About = () => {
       }
     }, [formloading])
 
+
+
+
    const phoneMouseLeave = () =>{
-       if(validatePhoneNumber(phone)){
-           setErr(null)
+       if(phone === ''){
+        setErr(null)
        }else{
-        setErr('Invalid Phone Number')
+        if(validatePhoneNumber(phone)){
+            setErr(null)
+        }else{
+            setErr('Invalid Phone Number')
+        }
        }
    }
 
@@ -79,10 +87,14 @@ const About = () => {
         e.target.previousSibling.focus();
     };
 
+
+
     const handleChooseFile = e =>{
         setUserImageName(userImage.current.files[0].name)
         setEditMode(true)
       }
+
+
 
     //save changes
     const saveChanges = e => {
@@ -118,7 +130,7 @@ const About = () => {
             {
                 formloading && <FormLoadingCover />
             }
-        <div className="bg-white p-3 shadow-sm rounded-sm">
+        <div className="bg-white p-3 overflow-auto shadow-sm rounded-sm">
             <div className="flex items-center space-x-2 font-semibold text-gray-900 leading-8">
                 <span clas="text-green-500">
                     <svg
@@ -139,7 +151,7 @@ const About = () => {
                 <span className="tracking-wide">About</span>
             </div>
             <div className="text-gray-700">
-                <div className="grid md:grid-cols-2 text-sm">
+                <div className="grid gap-4 md:grid-cols-2 text-sm">
                     <div className="grid" style={{gridTemplateColumns: "auto 1fr"}} >
                         <div className="whitespace-nowrap px-1 py-3 font-semibold">
                             First Name
@@ -153,7 +165,7 @@ const About = () => {
                                 disabled={true}
                                 autoComplete="none"
                                 className={`${errors?.firstName &&
-                                    "border-red-600 "} py-1 border border-gray-100 px-1 outline-none focus:border-purple-300`}
+                                    "border-red-600 "} py-1 border border-gray-100 w-full px-1 outline-none focus:border-purple-300`}
                             />
                             <i title="edit" onClick={setInputOfDisable} 
                                 className="fa fa-edit text-blue-400 -mt-1 ml-1 cursor-pointer"></i>
@@ -170,7 +182,7 @@ const About = () => {
                                 disabled={true}
                                 autoComplete="none"
                                 className={`${errors?.lastName &&
-                                    "border-red-600 "} border border-gray-100 py-1 px-1 outline-No Destination focus:border-purple-300`}
+                                    "border-red-600 "} border border-gray-100 w-full py-1 px-1 outline-No Destination focus:border-purple-300`}
                             />
                             <i title="edit" onClick={setInputOfDisable} 
                                 className="fa fa-edit text-blue-400 -mt-1 ml-1 cursor-pointer"></i>
@@ -186,7 +198,7 @@ const About = () => {
                                     value={gender ? gender : "m"}
                                     name="gender"
                                     onChange={onChange}
-                                    className="border border-gray-100 w-full py-1 px-1 outline focus:border-purple-300"
+                                    className="border border-gray-100 w-full w-full py-1 px-1 outline focus:border-purple-300"
                                 >
                                     <option value="m">Male</option>
                                     <option value="f">Female</option>
@@ -207,7 +219,7 @@ const About = () => {
                                 disabled={true}
                                 autoComplete="none"
                                 className={`${errors?.phone &&
-                                    "border-red-600 "} border border-gray-100 py-1 px-1 outline-No Destination focus:border-purple-300`}
+                                    "border-red-600 "} border border-gray-100 w-full py-1 px-1 outline-No Destination focus:border-purple-300`}
                                 onMouseLeave={phoneMouseLeave}
                             />
                             <i title="edit" onClick={setInputOfDisable} 
@@ -223,7 +235,7 @@ const About = () => {
                                 value={destination ? destination: "No Destination"}
                                 onChange={onChange}
                                 name="destination"
-                                className="border border-gray-100 w-full py-1 px-1 outline-No Destination focus:border-purple-300"
+                                className="border border-gray-100 w-full w-full py-1 px-1 outline-No Destination focus:border-purple-300"
                             >
                                 <option value="No Destination"> Select Destination </option>
                                 {destinations?.length > 0 ? (
@@ -265,12 +277,12 @@ const About = () => {
                             </svg>
                             <span className="ml-2">Upload Image</span>
                         </div>
-                        <input onChange={handleChooseFile} ref={userImage} className="-mt-1 w-full z-30 py-2 cursor-pointer top-0 absolute block opacity-0 w-24 pin-r pin-t" type="file" name="userImage" />
+                       <input onChange={handleChooseFile} ref={userImage} className="-mt-1 w-full z-30 py-2 cursor-pointer top-0 absolute block opacity-0 w-24 pin-r pin-t" type="file" name="userImage" />
                         </div>
                         {
                             userImageName && userImageName !== '' && <div className="flex">
                             <div className="py-1">{userImageName}&nbsp; 
-                            <span onClick={() => setUserImageName(null)}
+                            <span onClick={() => setUserImageName('')}
                                 className="text-pink-600 text-xs font-semibold cursor-pointer">remove</span>
                             </div>
                          </div>
@@ -281,11 +293,6 @@ const About = () => {
             </div>
             {success && !editMode &&(
                 <div className="w-full text-green-600 my-1 text-md text-center">{success}</div>
-            )}
-            {errors !== null &&(
-                <div className="w-full text-red-600 my-1 text-xs text-center">
-                    {errors}
-                </div>
             )}
             {err !== null && err !=='' &&(
                 <div className="w-full text-red-600 my-1 text-xs text-center">

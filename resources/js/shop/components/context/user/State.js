@@ -122,19 +122,22 @@ const UserState = (props) => {
         refreshUser()
         setFormLoading(false)
         clearErrors()
-        Toast.fire({
-          icon: "success",
-          title: res.data
-      });
-      })
-      .catch((err) => {
-        var obj = err.response.data.errors ? err.response.data.errors : "";
-        console.log(obj)
+          Toast.fire({
+            icon: "success",
+            title: res.data
+        });
+      }).catch((err) => {
+        setFormLoading(false)
+        var obj = err.response.data.errors ? err.response.data.errors : ""
+        MySwal.fire({
+          icon: 'error',
+          title: 'Validation Error',
+          text: obj[Object.keys(obj)[0]],
+        })
         dispatch({
           type: ERRORS,
-          payload: obj,
-          //payload: obj[Object.keys(obj)[0]],
-        });
+          payload: obj
+        })
       });
   };
 
@@ -154,15 +157,19 @@ const UserState = (props) => {
             icon: "success",
             title: res.data
         });
-      })
-      .catch((err) => {
-        var obj = err.response.data.errors ? err.response.data.errors : "";
-        console.log(obj)
-        dispatch({
-          type: ERRORS,
-          payload: obj,
-        });
+      }).catch((err) => {
+        setFormLoading(false)
+        var obj = err.response.data.errors ? err.response.data.errors : ""
+        MySwal.fire({
+          icon: 'error',
+          title: 'Validation Error',
+          text: obj[Object.keys(obj)[0]],
+        })
       });
+      dispatch({
+        type: ERRORS,
+        payload: obj
+      })
   };
 
 

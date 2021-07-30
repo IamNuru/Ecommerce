@@ -31,7 +31,7 @@ const Main = (props) => {
   const nodeRef = useRef(null)
 
   return (
-    <div className="block md:flex h-full">
+    <div className="block h-full">
       <>
         <Header />
       </>
@@ -39,6 +39,7 @@ const Main = (props) => {
         <Sidebar />
       </>
       <div className="w-full md:ml-48 mt-28 md:mt-14 px-1 md:pl-4">
+
         <TransitionGroup>
           <CSSTransition
           nodeRef={nodeRef} in timeout={500}
@@ -46,6 +47,7 @@ const Main = (props) => {
           >
            <div ref={nodeRef}>
         <Switch>
+          
           <Route exact path="/electronics" component={Electronic} />
           <Route exact path="/clothings" component={Clothings} />
           <Route exact path="/shoes" component={Shoes} />
@@ -67,6 +69,9 @@ const Main = (props) => {
           <Route exact path="/password/reset/:token" component={ResetPassword} />
           <Route exact path="/" component={MainPage} />
           <Route exact path="/allproducts" component={AllProductsPage} />
+
+
+
           <Route exact path="/an-authorised-page" component={UnAuthorisedPage} />
           <Route path="*" component={PageNotFound} />
         </Switch></div> 

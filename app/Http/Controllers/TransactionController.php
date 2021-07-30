@@ -104,7 +104,7 @@ class TransactionController extends Controller
                 "Cache-Control: no-cache",
             ),
         ));
-
+        $ref = $reference;
         $res = curl_exec($curl);
         $err = curl_error($curl);
         curl_close($curl);
@@ -114,10 +114,10 @@ class TransactionController extends Controller
             //echo "cURL Error #:" . $err;
         } else {
             $dt = json_decode($res);
-            DB::transaction(function () use ($request, $dt, $reference) {
+            DB::transaction(function () use ($request, $dt, $ref) {
                 $transaction = auth()->user()->transactions()->create([
                     'transaction_id' => $dt->data->id,
-                    'transaction_ref' => $reference,
+                    'transaction_ref' => $ref,
                     'payment_method' => $dt->data->channel,
                     'amount' => $dt->data->amount / 100,
                     'status' => 'placed',
